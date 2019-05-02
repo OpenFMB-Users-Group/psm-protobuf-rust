@@ -1,6 +1,9 @@
+[![Documentation](https://docs.rs/rust-openfmb-ops-protobuf/badge.svg)](https://docs.rs/rust-openfmb-ops-protobuf/)
+[![Crate](https://img.shields.io/crates/v/rust-openfmb-ops-protobuf.svg)](https://crates.io/crates/rust-openfmb-ops-protobuf)
+
 # Rust language protobuf for OpenFMB operational use cases
 
-This repository contains the [Rust](https://www.rust-lang.org/) programming language Protocol Buffer (protobuf) definitions based on the OpenFMB operational use case data model located [here](https://gitlab.com/openfmb/data-models/ops).
+[Rust](https://www.rust-lang.org/) programming language Protocol Buffer (protobuf) definitions based on the OpenFMB operational use case data model located [here](https://gitlab.com/openfmb/data-models/ops).
 
 ## Including in your project
 
@@ -19,7 +22,7 @@ rust-openfmb-ops-protobuf = "*" # <- Change to the version you prefer
 ```toml
 [dependencies]
 # Rust defintions for OpenFMB data model
-rust-openfmb-ops-protobuf = { git = "https://gitlab.com/openfmb/psm/ops/protobuf/rust-openfmb-ops-protobuf.git", branch = "<release-tag-label>" }
+rust-openfmb-ops-protobuf = { git = "https://gitlab.com/openfmb/psm/ops/protobuf/rust-openfmb-ops-protobuf.git", tag = "<release-tag-label>" }
 ```
 
 ## Using
@@ -27,8 +30,8 @@ rust-openfmb-ops-protobuf = { git = "https://gitlab.com/openfmb/psm/ops/protobuf
 After adding the depencency in your project's Cargo.toml file, you are ready to include the protobuf definitions into your source files like this:
 
 ```rust
-extern crate rust_openfmb_protobuf;
-use rust_openfmb_protobuf::*;
+extern crate rust_openfmb_ops_protobuf;
+use rust_openfmb_ops_protobuf::*;
 ```
 
 After importing the crate, you can now start using the protobuf definitions like this:
