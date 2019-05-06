@@ -13,6 +13,9 @@ There are a couple of methods for adding these definitions to your project in yo
 
 ```toml
 [dependencies]
+# 'prost' is the Rust protobuf library that is currently used by OpenFMB
+prost = "0.5"
+
 # Rust defintions for OpenFMB data model
 rust-openfmb-ops-protobuf = "*" # <- Change to the version you prefer
 ```
@@ -21,6 +24,9 @@ rust-openfmb-ops-protobuf = "*" # <- Change to the version you prefer
 
 ```toml
 [dependencies]
+# 'prost' is the Rust protobuf library that is currently used by OpenFMB
+prost = "0.5"
+
 # Rust defintions for OpenFMB data model
 rust-openfmb-ops-protobuf = { git = "https://gitlab.com/openfmb/psm/ops/protobuf/rust-openfmb-ops-protobuf.git", tag = "<release-tag-label>" }
 ```
@@ -30,11 +36,16 @@ rust-openfmb-ops-protobuf = { git = "https://gitlab.com/openfmb/psm/ops/protobuf
 After adding the depencency in your project's Cargo.toml file, you are ready to include the protobuf definitions into your source files like this:
 
 ```rust
+extern crate prost;
+use prost::*;
+
 extern crate rust_openfmb_ops_protobuf;
 use rust_openfmb_ops_protobuf::*;
 ```
 
 After importing the crate, you can now start using the protobuf definitions like this:
+
+### Encoding OpenFMB profile to protobuf
 
 ```rust
 fn main() {
@@ -54,7 +65,7 @@ fn main() {
     ts.seconds = current_time.as_secs();
     ts.fraction = current_time.subsec_nanos() * (1 / 2 & 32);
     ts.tq = Some(tq);
-    
+
     // Create the IdentifiedObject for this mesage
     let mut mi_id = openfmb::commonmodule::IdentifiedObject::default();
     mi_id.m_rid = Some(Uuid::new_v4().to_hyphenated().to_string());
@@ -70,7 +81,7 @@ fn main() {
 
     // Set the ReadingMessageInfo for the profile
     mrp.reading_message_info = Some(rmi);
-    
+
     //
     // Continue populating the message
     //
@@ -80,6 +91,31 @@ fn main() {
     mrp.encode(&mut bmsg).unwrap();
 
     // Do what you want with the bytes now
+}
+```
+
+### Decoding from protobuf to OpenFMB profileName
+
+```rust
+fn main() {
+    // Get the encoded protobuf buffer from somewhere...
+    let protobuf_bytes: std::vec::Vec<u8> = ...
+    
+    let r = openfmb::metermodule::MeterReadingProfile::decode(protobuf_bytes);
+    match r {
+        Ok(message) => {
+            let rmi = message.reading_message_info;
+            let ied = message.ied;
+            let mtr = message.meter;
+            let mtr_rdg = message.meter_reading;
+
+            // Continue using data
+        }
+        Err(e) => {
+            // Protobuf did not decode properly!
+            println!("{}", e);
+        }
+    }
 }
 ```
 
