@@ -1,17 +1,63 @@
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalFaultDirectionKind {
+    #[prost(enumeration="FaultDirectionKind", tag="1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalPhaseFaultDirectionKind {
+    #[prost(enumeration="PhaseFaultDirectionKind", tag="1")]
+    pub value: i32,
+}
+/// Directional protection indication information (ACD)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Acd {
+    /// General direction of the fault. If the faults of individual phases have different directions,
+    /// this attribute shall be set to 'dirGeneral'='both'.
+    #[prost(enumeration="FaultDirectionKind", tag="1")]
+    pub dir_general: i32,
+    /// Direction of the fault for earth current.
+    #[prost(message, optional, tag="2")]
+    pub dir_neut: ::core::option::Option<OptionalPhaseFaultDirectionKind>,
+    /// Direction of the fault for phase A.
+    #[prost(message, optional, tag="3")]
+    pub dir_phs_a: ::core::option::Option<OptionalPhaseFaultDirectionKind>,
+    /// Direction of the fault for phase B.
+    #[prost(message, optional, tag="4")]
+    pub dir_phs_b: ::core::option::Option<OptionalPhaseFaultDirectionKind>,
+    /// Direction of the fault for phase C.
+    #[prost(message, optional, tag="5")]
+    pub dir_phs_c: ::core::option::Option<OptionalPhaseFaultDirectionKind>,
+    /// General indication of a protection activation (e.g. by the fault). Depending on the function,
+    /// 'general' may or may not be resulting from the phase attributes (phsA', 'phsB', 'phsC', 'neut').
+    #[prost(bool, tag="6")]
+    pub general: bool,
+    /// See 'ACT.neut'.
+    #[prost(message, optional, tag="7")]
+    pub neut: ::core::option::Option<bool>,
+    /// Value true indicates a trip or a start event of phase A.
+    #[prost(message, optional, tag="8")]
+    pub phs_a: ::core::option::Option<bool>,
+    /// Value true indicates a trip or a start event of phase B.
+    #[prost(message, optional, tag="9")]
+    pub phs_b: ::core::option::Option<bool>,
+    /// Value true indicates a trip or a start event of phase C.
+    #[prost(message, optional, tag="10")]
+    pub phs_c: ::core::option::Option<bool>,
+}
 /// This is a root class to provide common identification for all classes needing identification and
 /// naming attributes.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct IdentifiedObject {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="1")]
-    pub description: ::std::option::Option<::std::string::String>,
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
     /// Master resource identifier issued by a model authority. The mRID must semantically be a UUID as
     /// specified in RFC 4122. The mRID is globally unique.
     #[prost(message, optional, tag="2")]
-    pub m_rid: ::std::option::Option<::std::string::String>,
+    pub m_rid: ::core::option::Option<::prost::alloc::string::String>,
     /// The name is any free human readable and possibly non unique text naming the object.
     #[prost(message, optional, tag="3")]
-    pub name: ::std::option::Option<::std::string::String>,
+    pub name: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// An electrical connection point (AC or DC) to a piece of conducting equipment. Terminals are
 /// connected at physical connection points called connectivity nodes.
@@ -19,7 +65,7 @@ pub struct IdentifiedObject {
 pub struct AcdcTerminal {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
     /// The connected status is related to a bus-branch model and the topological node to terminal
     /// relation.  True implies the terminal is connected to the related topological node and false implies
     /// it is not.  In a bus-branch model, the connected status is used to tell if equipment is disconnected
@@ -28,12 +74,12 @@ pub struct AcdcTerminal {
     /// particular for an AC line segment, where the reactive line charging can be significant, this is a
     /// relevant case.
     #[prost(message, optional, tag="2")]
-    pub connected: ::std::option::Option<bool>,
+    pub connected: ::core::option::Option<bool>,
     /// The orientation of the terminal connections for a multiple terminal conducting equipment.  The
     /// sequence numbering starts with 1 and additional terminals should follow in increasing order.   The
     /// first terminal is the "starting point" for a two terminal branch.
     #[prost(message, optional, tag="3")]
-    pub sequence_number: ::std::option::Option<i32>,
+    pub sequence_number: ::core::option::Option<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalUnitSymbolKind {
@@ -50,31 +96,28 @@ pub struct OptionalUnitMultiplierKind {
 pub struct ActivePower {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="1")]
-    pub multiplier: ::std::option::Option<OptionalUnitMultiplierKind>,
+    pub multiplier: ::core::option::Option<OptionalUnitMultiplierKind>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub unit: ::std::option::Option<OptionalUnitSymbolKind>,
+    pub unit: ::core::option::Option<OptionalUnitSymbolKind>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
-    pub value: ::std::option::Option<f32>,
+    pub value: ::core::option::Option<f32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalPhaseCodeKind {
     #[prost(enumeration="PhaseCodeKind", tag="1")]
     pub value: i32,
 }
-/// Analogue value (AnalogueValue)
+/// Unit definition (Unit)
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AnalogueValue {
-    /// Floating point representation of the measured value. The formula to convert between 'f' and the
-    /// process value (pVal) shall be: <i>pVal</i>='f'*10exp('Unit.multiplier') in ['Unit.SIUnit'].
+pub struct Unit {
+    /// (default='') Unit multiplier.
     #[prost(message, optional, tag="1")]
-    pub f: ::std::option::Option<f32>,
-    /// Integer representation of the measured value. The formula to convert between 'i' and the process
-    /// value (pVal) shall be: <i>pVal</i>=(('i'*'ScaledValueConfig.scaleFactor')+'ScaledValueConfig.offset'
-    ///  in ['Unit.SIUnit'].
-    #[prost(message, optional, tag="2")]
-    pub i: ::std::option::Option<i32>,
+    pub multiplier: ::core::option::Option<OptionalUnitMultiplierKind>,
+    /// SI unit of measure.
+    #[prost(enumeration="UnitSymbolKind", tag="2")]
+    pub si_unit: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalValidityKind {
@@ -147,7 +190,7 @@ pub struct OptionalSourceKind {
 pub struct Quality {
     /// Describes some reasons in case 'validity' is not 'good'.
     #[prost(message, optional, tag="1")]
-    pub detail_qual: ::std::option::Option<DetailQual>,
+    pub detail_qual: ::core::option::Option<DetailQual>,
     /// (default=false) If true, further update of the value has been blocked by an operator. The value
     /// shall be the information that was acquired before blocking. If this flag is set, then the
     /// 'detailQual.oldData' shall also be set. The operator shall use the data attribute 'CDC.blkEna' to
@@ -206,26 +249,15 @@ pub struct TimeQuality {
 /// information related to time model are available as requirements in Clause 21.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Timestamp {
-    /// Fractional of the current second when the value of time stamp has been determined. It shall be
-    /// calculated as (SUM from i=0 to 31 of bi*2**-(i+1)).
-    #[prost(uint32, tag="1")]
-    pub fraction: u32,
     /// Second since epoch (1970-01-01T00:00:00Z)
     #[prost(uint64, tag="2")]
     pub seconds: u64,
     /// IEC61850 time quality
     #[prost(message, optional, tag="3")]
-    pub tq: ::std::option::Option<TimeQuality>,
-}
-/// Unit definition (Unit)
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Unit {
-    /// (default='') Unit multiplier.
-    #[prost(message, optional, tag="1")]
-    pub multiplier: ::std::option::Option<OptionalUnitMultiplierKind>,
-    /// SI unit of measure.
-    #[prost(enumeration="UnitSymbolKind", tag="2")]
-    pub si_unit: i32,
+    pub tq: ::core::option::Option<TimeQuality>,
+    /// Partial (sub) second expressed in nanoseconds (10<sup>-9</sup> second).
+    #[prost(uint32, tag="4")]
+    pub nanoseconds: u32,
 }
 /// Measured value (MV)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -236,48 +268,38 @@ pub struct Mv {
     /// is typically used to create reports for analogue values. Such a report sent "by exception" is not
     /// comparable to the transfer of sampled measured values as supported by the CDC SAV.NOTE 2 This 'mag'
     /// is not the same as 'mag' of the constructed attribute class 'Vector'.
-    #[prost(message, optional, tag="1")]
-    pub mag: ::std::option::Option<AnalogueValue>,
+    #[prost(double, tag="1")]
+    pub mag: f64,
     /// Quality of the values in 'instMag', 'mag', 'range'.
     #[prost(message, optional, tag="2")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Timestamp of the last refresh of the value in 'mag' or of the last change of the value in any of
     /// 'range' or 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
     /// Unit for: 'instMag', 'mag', 'subMag', 'rangeC'.
     #[prost(message, optional, tag="4")]
-    pub units: ::std::option::Option<Unit>,
+    pub units: ::core::option::Option<Unit>,
 }
 /// IEC61850 logical node.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LogicalNode {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
 }
 /// LN: Generic process I/O   Name: GGIO
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AnalogStatusGgio {
+pub struct AnalogEventAndStatusGgio {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
+    pub logical_node: ::core::option::Option<LogicalNode>,
     /// Generic analogue input <i>n</i>.
     #[prost(message, optional, tag="2")]
-    pub an_in: ::std::option::Option<Mv>,
+    pub an_in: ::core::option::Option<Mv>,
     /// Phase code
     #[prost(message, optional, tag="3")]
-    pub phase: ::std::option::Option<OptionalPhaseCodeKind>,
-}
-/// Analogue value control (AnalogueValueCtl)
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AnalogueValueCtl {
-    /// Floating point representation of the measured value.  See 'AnalogueValue.f'.
-    #[prost(message, optional, tag="1")]
-    pub f: ::std::option::Option<f32>,
-    /// Integer representation of the measured value. See 'AnalogueValue.i'.
-    #[prost(message, optional, tag="2")]
-    pub i: ::std::option::Option<i32>,
+    pub phase: ::core::option::Option<OptionalPhaseCodeKind>,
 }
 /// This is a root class similar to IdentifiedObject but without the mRID. The reason to separate
 /// the two classes is because the mRID may need to be defined as a separate key field for technology
@@ -286,30 +308,27 @@ pub struct AnalogueValueCtl {
 pub struct NamedObject {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="1")]
-    pub description: ::std::option::Option<::std::string::String>,
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
     /// The name is any free human readable and possibly non unique text naming the object.
     #[prost(message, optional, tag="2")]
-    pub name: ::std::option::Option<::std::string::String>,
+    pub name: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// The parts of a power system that are physical devices, electronic or mechanical.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ApplicationSystem {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub named_object: ::std::option::Option<NamedObject>,
+    pub named_object: ::core::option::Option<NamedObject>,
     /// MISSING DOCUMENTATION!!!
     #[prost(string, tag="2")]
-    pub m_rid: std::string::String,
+    pub m_rid: ::prost::alloc::string::String,
 }
 /// Analogue setting (FC=SP) (ASG_SP)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Asg {
     /// The value of the analogue setting.
-    #[prost(message, optional, tag="1")]
-    pub set_mag: ::std::option::Option<AnalogueValueCtl>,
-    /// Unit for 'setMag', 'minVal', 'maxVal', 'stepSize'.
-    #[prost(message, optional, tag="2")]
-    pub units: ::std::option::Option<Unit>,
+    #[prost(double, tag="1")]
+    pub set_mag: f64,
 }
 /// Binary counter reading (BCR)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -320,39 +339,36 @@ pub struct Bcr {
     pub act_val: i64,
     /// Quality of the values in 'actVal', 'frVal'.
     #[prost(message, optional, tag="2")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Timestamp of the last change of value in 'actVal' or 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
-    /// Unit for value in 'pulsQty'.
-    #[prost(message, optional, tag="4")]
-    pub units: ::std::option::Option<OptionalUnitSymbolKind>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// Specialized 61850 SPS class
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatusSps {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// MISSING DOCUMENTATION!!!
     #[prost(bool, tag="2")]
     pub st_val: bool,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// LN: Generic process I/O   Name: GGIO
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct BooleanStatusGgio {
+pub struct BooleanEventAndStatusGgio {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
+    pub logical_node: ::core::option::Option<LogicalNode>,
     /// If true, indication <i>n</i> is present.
     #[prost(message, optional, tag="2")]
-    pub ind: ::std::option::Option<StatusSps>,
+    pub ind: ::core::option::Option<StatusSps>,
     /// Phase code
     #[prost(message, optional, tag="3")]
-    pub phase: ::std::option::Option<OptionalPhaseCodeKind>,
+    pub phase: ::core::option::Option<OptionalPhaseCodeKind>,
 }
 /// IEC61850-7-2 Service parameter for conditions checking
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -361,10 +377,10 @@ pub struct CheckConditions {
     /// state for the control command.  One example is that 2 circuit breakers on a busbar need to be
     /// interlocked so one is open and one is closed, but not both on.
     #[prost(message, optional, tag="1")]
-    pub interlock_check: ::std::option::Option<bool>,
+    pub interlock_check: ::core::option::Option<bool>,
     /// To check if a device is synchrous to the system.
     #[prost(message, optional, tag="2")]
-    pub synchro_check: ::std::option::Option<bool>,
+    pub synchro_check: ::core::option::Option<bool>,
 }
 /// Vector definition (Vector)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -372,10 +388,10 @@ pub struct Vector {
     /// (range=[-180...180]) Angle of the complex value (Unit.SIUnit='deg' and Unit.multiplier='');
     /// angle reference is defined in the context where this type is used.
     #[prost(message, optional, tag="1")]
-    pub ang: ::std::option::Option<AnalogueValue>,
+    pub ang: ::core::option::Option<f64>,
     /// Magnitude of the complex value.
-    #[prost(message, optional, tag="2")]
-    pub mag: ::std::option::Option<AnalogueValue>,
+    #[prost(double, tag="2")]
+    pub mag: f64,
 }
 /// Complex measured value (CMV)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -384,27 +400,24 @@ pub struct Cmv {
     /// deadband calculation is done both on 'instCVal.mag' (based on 'db') and on 'instCVal.ang' (based on
     /// 'dbAng'), independently. See  'MV.mag'.
     #[prost(message, optional, tag="1")]
-    pub c_val: ::std::option::Option<Vector>,
+    pub c_val: ::core::option::Option<Vector>,
     /// Quality of the values in 'instCVal', 'cVal', 'range', ‘rangeAng’.
     #[prost(message, optional, tag="2")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Timestamp of the last refresh of the value in 'cVal' or of the last change of the value in any
     /// of 'range', 'rangeAng' or 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
-    /// Units for: 'instCVal.mag', 'cVal.mag', 'subCVal.mag', 'rangeC'.
-    #[prost(message, optional, tag="4")]
-    pub units: ::std::option::Option<Unit>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// Asset representation of a ConductingEquipment.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ConductingEquipment {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub named_object: ::std::option::Option<NamedObject>,
+    pub named_object: ::core::option::Option<NamedObject>,
     /// MISSING DOCUMENTATION!!!
     #[prost(string, tag="2")]
-    pub m_rid: std::string::String,
+    pub m_rid: ::prost::alloc::string::String,
 }
 /// An AC electrical connection point to a piece of conducting equipment. Terminals are connected at
 /// physical connection points called connectivity nodes.
@@ -412,18 +425,25 @@ pub struct ConductingEquipment {
 pub struct Terminal {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub a_cdc_terminal: ::std::option::Option<AcdcTerminal>,
+    pub a_cdc_terminal: ::core::option::Option<AcdcTerminal>,
     /// Represents the normal network phasing condition. If the attribute is missing three phases (ABC
     /// or ABCN) shall be assumed.
     #[prost(message, optional, tag="2")]
-    pub phases: ::std::option::Option<OptionalPhaseCodeKind>,
+    pub phases: ::core::option::Option<OptionalPhaseCodeKind>,
 }
 /// Reading associated with an equipment such as a recloser.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ConductingEquipmentTerminalReading {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="1")]
-    pub terminal: ::std::option::Option<Terminal>,
+    pub terminal: ::core::option::Option<Terminal>,
+}
+/// <<statistics>> Controllable analogue process value (APC)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ControlApc {
+    /// Service parameter that determines the control activity.
+    #[prost(double, tag="1")]
+    pub ctl_val: f64,
 }
 /// Specialized DPC 61850 CDC class
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -440,13 +460,12 @@ pub struct ControlDpc {
 /// normal Timestamp data type.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ControlTimestamp {
-    /// Fractional of the current second when the value of time stamp has been determined. It shall be
-    /// calculated as (SUM from i=0 to 31 of bi*2**-(i+1)).
-    #[prost(uint32, tag="1")]
-    pub fraction: u32,
     /// Second since epoch (1970-01-01T00:00:00Z)
     #[prost(uint64, tag="2")]
     pub seconds: u64,
+    /// Partial (sub) second expressed in nanoseconds (10<sup>-9</sup> second).
+    #[prost(uint32, tag="3")]
+    pub nanoseconds: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalScheduleParameterKind {
@@ -460,39 +479,39 @@ pub struct EngScheduleParameter {
     #[prost(enumeration="ScheduleParameterKind", tag="1")]
     pub schedule_parameter_type: i32,
     /// MISSING DOCUMENTATION!!!
-    #[prost(float, tag="2")]
-    pub value: f32,
+    #[prost(double, tag="2")]
+    pub value: f64,
 }
 /// Point definition (Point)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SchedulePoint {
     /// Schedule parameter
     #[prost(message, repeated, tag="1")]
-    pub schedule_parameter: ::std::vec::Vec<EngScheduleParameter>,
+    pub schedule_parameter: ::prost::alloc::vec::Vec<EngScheduleParameter>,
     /// Start time
     #[prost(message, optional, tag="2")]
-    pub start_time: ::std::option::Option<ControlTimestamp>,
+    pub start_time: ::core::option::Option<ControlTimestamp>,
 }
 /// Curve shape setting (FC=SP) (CSG_SP)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ScheduleCsg {
     /// The array with the points specifying a time schedule
     #[prost(message, repeated, tag="1")]
-    pub sch_pts: ::std::vec::Vec<SchedulePoint>,
+    pub sch_pts: ::prost::alloc::vec::Vec<SchedulePoint>,
 }
 /// OpenFMB specialization for control schedule using:  LN: Schedule   Name: FSCH
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ControlScheduleFsch {
     /// Analog CSG
     #[prost(message, optional, tag="1")]
-    pub val_acsg: ::std::option::Option<ScheduleCsg>,
+    pub val_acsg: ::core::option::Option<ScheduleCsg>,
 }
 /// OpenFMB specialization for logical node control
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LogicalNodeForControl {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
+    pub logical_node: ::core::option::Option<LogicalNode>,
 }
 /// LN: Schedule controller   Name: FSCC  F:    Function (generic) SC:  Schedule Controller C:   
 /// Control (execution)
@@ -500,13 +519,20 @@ pub struct LogicalNodeForControl {
 pub struct ControlFscc {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node_for_control: ::std::option::Option<LogicalNodeForControl>,
+    pub logical_node_for_control: ::core::option::Option<LogicalNodeForControl>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub control_schedule_fsch: ::std::option::Option<ControlScheduleFsch>,
+    pub control_schedule_fsch: ::core::option::Option<ControlScheduleFsch>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
-    pub island_control_schedule_fsch: ::std::option::Option<ControlScheduleFsch>,
+    pub island_control_schedule_fsch: ::core::option::Option<ControlScheduleFsch>,
+}
+/// &lt;&lt;statistics&gt;&gt; Controllable integer status (INC)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ControlInc {
+    /// Service parameter that determines the control activity.
+    #[prost(int32, tag="1")]
+    pub ctl_val: i32,
 }
 /// Integer status setting (FC=SP) (ING_SP)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -516,7 +542,7 @@ pub struct ControlIng {
     pub set_val: i32,
     /// Unit for 'setVal', 'minVal', 'maxVal', 'stepSize'.
     #[prost(message, optional, tag="2")]
-    pub units: ::std::option::Option<Unit>,
+    pub units: ::core::option::Option<Unit>,
 }
 /// &lt;&lt;statistics&gt;&gt; Integer controlled step position information (ISC)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -530,17 +556,17 @@ pub struct ControlIsc {
 pub struct MessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub message_time_stamp: ::std::option::Option<Timestamp>,
+    pub message_time_stamp: ::core::option::Option<Timestamp>,
 }
 /// Generic control message info.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ControlMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub message_info: ::std::option::Option<MessageInfo>,
+    pub message_info: ::core::option::Option<MessageInfo>,
 }
 /// Controllable single point (SPC)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -558,45 +584,84 @@ pub struct ControlSpc {
 pub struct ControlValue {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
-    /// The attribute modBlk is used to tag out a device. if it is TRUE, any setpoints and control
-    /// schedule in a message payload should be ignored.   It should also be presented in a status profile. 
-    /// Any modBlk value change (i.e. TRUE to FALSE and vice versa) should trigger an event.
-    #[prost(message, optional, tag="2")]
-    pub mod_blk: ::std::option::Option<bool>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
+    /// The attribute modBlk is used to tag out a device. If it is TRUE, any setpoints and control in a
+    /// message payload should be ignored.   It should also be presented in a status profile.  Any modBlk
+    /// value change (i.e. TRUE to FALSE and vice versa) should trigger an event.
+    #[prost(message, optional, tag="3")]
+    pub mod_blk: ::core::option::Option<bool>,
+    /// If true, reset the device before executing any other controls.
+    #[prost(message, optional, tag="4")]
+    pub reset: ::core::option::Option<bool>,
 }
 /// Interval between two date and time points.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DateTimeInterval {
     /// End date and time of this interval.
     #[prost(message, optional, tag="1")]
-    pub end: ::std::option::Option<i64>,
+    pub end: ::core::option::Option<i64>,
     /// Start date and time of this interval.
     #[prost(message, optional, tag="2")]
-    pub start: ::std::option::Option<i64>,
+    pub start: ::core::option::Option<i64>,
 }
 /// Phase to phase related measured values of a three-phase system (DEL)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Del {
     /// Value of phase A to phase B measurement.
     #[prost(message, optional, tag="1")]
-    pub phs_ab: ::std::option::Option<Cmv>,
+    pub phs_ab: ::core::option::Option<Cmv>,
     /// Value of phase B to phase C measurement.
     #[prost(message, optional, tag="2")]
-    pub phs_bc: ::std::option::Option<Cmv>,
+    pub phs_bc: ::core::option::Option<Cmv>,
     /// Value of phase C to phase A measurement.
     #[prost(message, optional, tag="3")]
-    pub phs_ca: ::std::option::Option<Cmv>,
+    pub phs_ca: ::core::option::Option<Cmv>,
+}
+/// [OpenFMB CDC extension] Per Phase DPC.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseDpc {
+    /// 3 Phase control.
+    #[prost(message, optional, tag="1")]
+    pub phs3: ::core::option::Option<ControlDpc>,
+    /// Phase A control.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<ControlDpc>,
+    /// Phase B control.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<ControlDpc>,
+    /// Phase C control.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<ControlDpc>,
+}
+/// Reclose enabled
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DiscreteControlXcbr {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node_for_control: ::core::option::Option<LogicalNodeForControl>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub pos: ::core::option::Option<PhaseDpc>,
+    /// Protection mode such as a group setting or pre-defined curve profile. It is usually pre-defined
+    /// by a circuit segment service.
+    #[prost(message, optional, tag="3")]
+    pub protection_mode: ::core::option::Option<ControlInc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="4")]
+    pub reclose_enabled: ::core::option::Option<ControlSpc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="5")]
+    pub reset_protection_pickup: ::core::option::Option<ControlSpc>,
 }
 /// Generic user of energy - a  point of consumption on the power system model.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EnergyConsumer {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub conducting_equipment: ::std::option::Option<ConductingEquipment>,
+    pub conducting_equipment: ::core::option::Option<ConductingEquipment>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub operating_limit: ::std::option::Option<::std::string::String>,
+    pub operating_limit: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalCalcMethodKind {
@@ -623,7 +688,7 @@ pub struct EngGridConnectModeKind {
     pub set_val: i32,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub set_val_extension: ::std::option::Option<::std::string::String>,
+    pub set_val_extension: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalPfSignKind {
@@ -647,13 +712,13 @@ pub struct OptionalBehaviourModeKind {
 pub struct EnsBehaviourModeKind {
     /// Quality of the value in 'stVal'.
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Value of the data.
     #[prost(enumeration="BehaviourModeKind", tag="2")]
     pub st_val: i32,
     /// Timestamp of the last change or update event of 'stVal' or the last change of value in 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalDerGeneratorStateKind {
@@ -665,13 +730,13 @@ pub struct OptionalDerGeneratorStateKind {
 pub struct EnsDerGeneratorStateKind {
     /// Quality of the value in 'stVal'.
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Value of the data.
     #[prost(enumeration="DerGeneratorStateKind", tag="2")]
     pub st_val: i32,
     /// Timestamp of the last change or update event of 'stVal' or the last change of value in 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalDynamicTestKind {
@@ -683,13 +748,13 @@ pub struct OptionalDynamicTestKind {
 pub struct EnsDynamicTestKind {
     /// Quality of the value in 'stVal'.
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Value of the data.
     #[prost(enumeration="DynamicTestKind", tag="2")]
     pub st_val: i32,
     /// Timestamp of the last change or update event of 'stVal' or the last change of value in 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// Grid connect event &amp; status mode kind
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -699,7 +764,7 @@ pub struct EnsGridConnectModeKind {
     pub st_val: i32,
     /// MISSING DOCUMENTATION!!!
     #[prost(string, tag="2")]
-    pub st_val_extension: std::string::String,
+    pub st_val_extension: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalHealthKind {
@@ -712,9 +777,24 @@ pub struct EnsHealthKind {
     /// Textual description of the data. In case it is used within the CDC LPL, the description refers
     /// to the logical node.
     #[prost(message, optional, tag="1")]
-    pub d: ::std::option::Option<::std::string::String>,
+    pub d: ::core::option::Option<::prost::alloc::string::String>,
     /// Value of the data.
     #[prost(enumeration="HealthKind", tag="2")]
+    pub st_val: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalSwitchingCapabilityKind {
+    #[prost(enumeration="SwitchingCapabilityKind", tag="1")]
+    pub value: i32,
+}
+/// <<abstract>> Enumerated status (ENS)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EnsSwitchingCapabilityKind {
+    /// If true, 'q.operatorBlocked'=true, and the process value is no longer updated.
+    #[prost(message, optional, tag="1")]
+    pub blk_ena: ::core::option::Option<bool>,
+    /// Value of the data.
+    #[prost(enumeration="SwitchingCapabilityKind", tag="2")]
     pub st_val: i32,
 }
 /// MISSING DOCUMENTATION!!!
@@ -722,28 +802,31 @@ pub struct EnsHealthKind {
 pub struct Ess {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub conducting_equipment: ::std::option::Option<ConductingEquipment>,
+    pub conducting_equipment: ::core::option::Option<ConductingEquipment>,
 }
 /// Generic event message information
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub message_info: ::std::option::Option<MessageInfo>,
+    pub message_info: ::core::option::Option<MessageInfo>,
 }
 /// Event value
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventValue {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub mod_blk: ::core::option::Option<bool>,
 }
 /// The source where a forecast value is issued.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ForecastValueSource {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
 }
 /// Intelligent Electronic Device is a device with a microprocessor that can contain one or more
 /// (IEC61850) SERVERs. In the context of IEC61850, IED could be an electronic protection device, a
@@ -757,11 +840,11 @@ pub struct ForecastValueSource {
 pub struct ForecastIed {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub forecast_value_source: ::std::option::Option<ForecastValueSource>,
+    pub forecast_value_source: ::core::option::Option<ForecastValueSource>,
     /// For control, this is an application ID, unique within communication system, and if the message
     /// is transformed between gateway the original source application ID should be kept.
     #[prost(string, tag="2")]
-    pub source_application_id: std::string::String,
+    pub source_application_id: ::prost::alloc::string::String,
     /// Message publication date time
     #[prost(int64, tag="3")]
     pub source_date_time: i64,
@@ -771,63 +854,52 @@ pub struct ForecastIed {
 pub struct ForecastValue {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
-}
-/// Intelligent Electronic Device is a device with a microprocessor that can contain one or more
-/// (IEC61850) SERVERs. In the context of IEC61850, IED could be an electronic protection device, a
-/// controller or even a laptop/desktop computer. <b>Modelling note</b>: This class is not explicitly
-/// defined in IEC61850-7-2 (but only in SCL: IEC61850-6). However, it is an important concept that
-/// deserves its place in the meta-model. When the meta-model gets instantiated from a direct link to an
-/// IED with an IEC61850 SERVER, we typically create an instance of the meta-model IED per connection.
-/// When the meta-model gets instantiated from an SCL file, there is the full description of IED and its
-/// functions.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Ied {
-    /// UML inherited base object
-    #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
 }
 /// <<statistics>> Integer status (INS)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatusIns {
     /// Quality of the value in 'stVal'.
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Value of the data.
     #[prost(int32, tag="2")]
     pub st_val: i32,
     /// Timestamp of the last change or update event of 'stVal' or the last change of value in 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
-    /// Units for: 'stVal', 'subVal'.
-    #[prost(message, optional, tag="4")]
-    pub units: ::std::option::Option<Unit>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// Status expressed in integer based on IEC61850 GGIO.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct IntegerStatusGgio {
+pub struct IntegerEventAndStatusGgio {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
+    pub logical_node: ::core::option::Option<LogicalNode>,
     /// Generic integer status input <i>n</i>.
     #[prost(message, optional, tag="2")]
-    pub int_in: ::std::option::Option<StatusIns>,
+    pub int_in: ::core::option::Option<StatusIns>,
     /// Phase code
     #[prost(message, optional, tag="3")]
-    pub phase: ::std::option::Option<OptionalPhaseCodeKind>,
+    pub phase: ::core::option::Option<OptionalPhaseCodeKind>,
 }
 /// Logical node for event and status
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LogicalNodeForEventAndStatus {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
+    pub logical_node: ::core::option::Option<LogicalNode>,
     /// Behavior of the function
     #[prost(message, optional, tag="2")]
-    pub beh: ::std::option::Option<EnsBehaviourModeKind>,
+    pub beh: ::core::option::Option<EnsBehaviourModeKind>,
     /// Asset health
     #[prost(message, optional, tag="3")]
-    pub ee_health: ::std::option::Option<EnsHealthKind>,
+    pub ee_health: ::core::option::Option<EnsHealthKind>,
+    /// Hot line tag.
+    #[prost(message, optional, tag="4")]
+    pub hot_line_tag: ::core::option::Option<StatusSps>,
+    /// Remote control block.
+    #[prost(message, optional, tag="5")]
+    pub remote_blk: ::core::option::Option<StatusSps>,
 }
 /// The current state for a measurement. A state value is an instance of a measurement from a
 /// specific source. Measurements can be associated with many state values, each representing a
@@ -836,7 +908,7 @@ pub struct LogicalNodeForEventAndStatus {
 pub struct MeasurementValue {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
 }
 /// Physical asset that performs the metering role of the usage point. Used for measuring
 /// consumption and detection of events.
@@ -844,196 +916,30 @@ pub struct MeasurementValue {
 pub struct Meter {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub conducting_equipment: ::std::option::Option<ConductingEquipment>,
+    pub conducting_equipment: ::core::option::Option<ConductingEquipment>,
 }
 /// Generic event message information
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptimizationMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub message_info: ::std::option::Option<MessageInfo>,
+    pub message_info: ::core::option::Option<MessageInfo>,
 }
-/// Specialized 61850 MMTN LN class
+/// [OpenFMB CDC extension] Per Phase ISC.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReadingMmtn {
-    /// UML inherited base object
+pub struct PhaseApc {
+    /// 3 Phase control.
     #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
-    /// Apparent energy demand (direction: from busbar).
+    pub phs3: ::core::option::Option<ControlApc>,
+    /// Phase A control.
     #[prost(message, optional, tag="2")]
-    pub dmd_v_ah: ::std::option::Option<Bcr>,
-    /// Reactive energy demand (direction: from busbar).
+    pub phs_a: ::core::option::Option<ControlApc>,
+    /// Phase B control.
     #[prost(message, optional, tag="3")]
-    pub dmd_v_arh: ::std::option::Option<Bcr>,
-    /// Real energy demand (direction: from busbar).
+    pub phs_b: ::core::option::Option<ControlApc>,
+    /// Phase C control.
     #[prost(message, optional, tag="4")]
-    pub dmd_wh: ::std::option::Option<Bcr>,
-    /// Apparent energy supply (default direction: towards busbar).
-    #[prost(message, optional, tag="5")]
-    pub sup_v_ah: ::std::option::Option<Bcr>,
-    /// Reactive energy supply (default direction: towards busbar).
-    #[prost(message, optional, tag="6")]
-    pub sup_v_arh: ::std::option::Option<Bcr>,
-    /// Real energy supply (default direction: towards busbar).
-    #[prost(message, optional, tag="7")]
-    pub sup_wh: ::std::option::Option<Bcr>,
-    /// Net apparent energy since last reset.
-    #[prost(message, optional, tag="8")]
-    pub tot_v_ah: ::std::option::Option<Bcr>,
-    /// Net reactive energy since last reset.
-    #[prost(message, optional, tag="9")]
-    pub tot_v_arh: ::std::option::Option<Bcr>,
-    /// Net real energy since last reset.
-    #[prost(message, optional, tag="10")]
-    pub tot_wh: ::std::option::Option<Bcr>,
-}
-/// Specialized 61850 MMTN LN class
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PhaseMmtn {
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="1")]
-    pub phs_a: ::std::option::Option<ReadingMmtn>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="2")]
-    pub phs_ab: ::std::option::Option<ReadingMmtn>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="3")]
-    pub phs_b: ::std::option::Option<ReadingMmtn>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="4")]
-    pub phs_bc: ::std::option::Option<ReadingMmtn>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="5")]
-    pub phs_c: ::std::option::Option<ReadingMmtn>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="6")]
-    pub phs_ca: ::std::option::Option<ReadingMmtn>,
-}
-/// Grid connect mode kind
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RampRate {
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="1")]
-    pub negative_reactive_power_kv_ar_per_min: ::std::option::Option<f32>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="2")]
-    pub negative_real_power_kw_per_min: ::std::option::Option<f32>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="3")]
-    pub positive_reactive_power_kv_ar_per_min: ::std::option::Option<f32>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="4")]
-    pub positive_real_power_kw_per_min: ::std::option::Option<f32>,
-}
-/// Generic reading message information
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReadingMessageInfo {
-    /// UML inherited base object
-    #[prost(message, optional, tag="1")]
-    pub message_info: ::std::option::Option<MessageInfo>,
-}
-/// Specialized 61850 MMTR class
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReadingMmtr {
-    /// UML inherited base object
-    #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
-    /// Apparent energy demand (direction: from busbar).
-    #[prost(message, optional, tag="2")]
-    pub dmd_v_ah: ::std::option::Option<Bcr>,
-    /// Reactive energy demand (direction: from busbar).
-    #[prost(message, optional, tag="3")]
-    pub dmd_v_arh: ::std::option::Option<Bcr>,
-    /// Real energy demand (direction: from busbar).
-    #[prost(message, optional, tag="4")]
-    pub dmd_wh: ::std::option::Option<Bcr>,
-    /// Apparent energy supply (default direction: towards busbar).
-    #[prost(message, optional, tag="5")]
-    pub sup_v_ah: ::std::option::Option<Bcr>,
-    /// Reactive energy supply (default direction: towards busbar).
-    #[prost(message, optional, tag="6")]
-    pub sup_v_arh: ::std::option::Option<Bcr>,
-    /// Real energy supply (default direction: towards busbar).
-    #[prost(message, optional, tag="7")]
-    pub sup_wh: ::std::option::Option<Bcr>,
-    /// Net apparent energy since last reset.
-    #[prost(message, optional, tag="8")]
-    pub tot_v_ah: ::std::option::Option<Bcr>,
-    /// Net reactive energy since last reset.
-    #[prost(message, optional, tag="9")]
-    pub tot_v_arh: ::std::option::Option<Bcr>,
-    /// Net real energy since last reset.
-    #[prost(message, optional, tag="10")]
-    pub tot_wh: ::std::option::Option<Bcr>,
-}
-/// Phase to ground/neutral related measured values of a three-phase system (WYE)
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Wye {
-    /// Net current, as the algebraic sum of the instantaneous values of currents flowing through all
-    /// live conductors and the neutral of a circuit at one point of the electrical installation ('phsA
-    /// instCVal'+'phsB.instCVal'+'phsC.instCVal'+'neut.instCVal').
-    #[prost(message, optional, tag="1")]
-    pub net: ::std::option::Option<Cmv>,
-    /// Value of the measured phase neutral. If a direct measurement of this value is not available, it
-    /// is acceptable to substitute an estimate computed by creating the algebraic sum of the instantaneous
-    /// values of currents flowing through all live conductors ('phsA.instCVal'+'phsB.instCVal'+'phsC
-    /// instCVal'); in that case, 'neut'='res'.
-    #[prost(message, optional, tag="2")]
-    pub neut: ::std::option::Option<Cmv>,
-    /// Value of phase A.
-    #[prost(message, optional, tag="3")]
-    pub phs_a: ::std::option::Option<Cmv>,
-    /// Value of phase B.
-    #[prost(message, optional, tag="4")]
-    pub phs_b: ::std::option::Option<Cmv>,
-    /// Value of phase C.
-    #[prost(message, optional, tag="5")]
-    pub phs_c: ::std::option::Option<Cmv>,
-}
-/// Specialized 61850 MMXU LN class
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReadingMmxu {
-    /// UML inherited base object
-    #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
-    /// Phase to ground/phase to neutral three phase currents.
-    #[prost(message, optional, tag="2")]
-    pub a: ::std::option::Option<Wye>,
-    /// Kind of statistical calculation, specifying how the data attributes that represent analogue
-    /// values have been calculated. The calculation method shall be the same for all data objects of the
-    /// logical node instance.If the value is 'PEAK_FUNDAMENTAL', angle may be present in a data object of
-    /// complex measured value type (CMV, such as in WYE, DEL, etc.), otherwise angle is not used (if
-    /// ‘TRUE_RMS’ and ‘RMS_FUNDAMENTAL’).If the value is 'unspecified', the dependent data objects may be
-    /// meaningless.
-    #[prost(message, optional, tag="3")]
-    pub clc_mth: ::std::option::Option<EngCalcMethodKind>,
-    /// Frequency [Hz].
-    #[prost(message, optional, tag="4")]
-    pub hz: ::std::option::Option<Mv>,
-    /// Phase to ground/phase to neutral power factors.The power factor is defined as P (active power) /
-    /// S (apparent power), so the value range is 0...1. If current (I) and voltage (U) are sinusoidal and
-    /// displaced by the angle phi, then the power factor is |cos phi|, again with the value range 0...1.
-    /// Therefore, for the power factor per phase, value is contained in 'mag' and 'ang' is not used.
-    #[prost(message, optional, tag="5")]
-    pub pf: ::std::option::Option<Wye>,
-    /// Sign convention for power factor 'PF' (and reactive power 'VAr').
-    #[prost(message, optional, tag="6")]
-    pub pf_sign: ::std::option::Option<EngPfSignKind>,
-    /// Phase to ground (line) voltages.
-    #[prost(message, optional, tag="7")]
-    pub ph_v: ::std::option::Option<Wye>,
-    /// Phase to phase voltages.
-    #[prost(message, optional, tag="8")]
-    pub ppv: ::std::option::Option<Del>,
-    /// Phase to ground/phase to neutral apparent powers S.
-    #[prost(message, optional, tag="9")]
-    pub va: ::std::option::Option<Wye>,
-    /// Phase to ground/phase to neutral reactive powers Q.
-    #[prost(message, optional, tag="10")]
-    pub v_ar: ::std::option::Option<Wye>,
-    /// Phase to ground/phase to neutral real powers P.
-    #[prost(message, optional, tag="11")]
-    pub w: ::std::option::Option<Wye>,
+    pub phs_c: ::core::option::Option<ControlApc>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalDbPosKind {
@@ -1043,15 +949,317 @@ pub struct OptionalDbPosKind {
 /// Specialized 61850 DPS class
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatusDps {
-    /// Quality of the value in 'stVal'.
+    /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Status value of the controllable data object.
     #[prost(enumeration="DbPosKind", tag="2")]
     pub st_val: i32,
     /// Timestamp of the last change of the value in any of 'stVal' or 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
+}
+/// [OpenFMB CDC extension] Per Phase DPS.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseDps {
+    /// 3 Phase status.
+    #[prost(message, optional, tag="1")]
+    pub phs3: ::core::option::Option<StatusDps>,
+    /// Phase A status.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<StatusDps>,
+    /// Phase B status.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<StatusDps>,
+    /// Phase C status.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<StatusDps>,
+}
+/// [OpenFMB CDC extension] Per Phase INS.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseIns {
+    /// 3 Phase control.
+    #[prost(message, optional, tag="1")]
+    pub phs3: ::core::option::Option<StatusIns>,
+    /// Phase A control.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<StatusIns>,
+    /// Phase B control.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<StatusIns>,
+    /// Phase C control.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<StatusIns>,
+}
+/// [OpenFMB CDC extension] Per Phase ISC.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseIsc {
+    /// 3 Phase control.
+    #[prost(message, optional, tag="1")]
+    pub phs3: ::core::option::Option<ControlIsc>,
+    /// Phase A control.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<ControlIsc>,
+    /// Phase B control.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<ControlIsc>,
+    /// Phase C control.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<ControlIsc>,
+}
+/// Specialized 61850 MMTN LN class
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadingMmtn {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// Apparent energy demand (direction: from busbar).
+    #[prost(message, optional, tag="2")]
+    pub dmd_v_ah: ::core::option::Option<Bcr>,
+    /// Reactive energy demand (direction: from busbar).
+    #[prost(message, optional, tag="3")]
+    pub dmd_v_arh: ::core::option::Option<Bcr>,
+    /// Real energy demand (direction: from busbar).
+    #[prost(message, optional, tag="4")]
+    pub dmd_wh: ::core::option::Option<Bcr>,
+    /// Apparent energy supply (default direction: towards busbar).
+    #[prost(message, optional, tag="5")]
+    pub sup_v_ah: ::core::option::Option<Bcr>,
+    /// Reactive energy supply (default direction: towards busbar).
+    #[prost(message, optional, tag="6")]
+    pub sup_v_arh: ::core::option::Option<Bcr>,
+    /// Real energy supply (default direction: towards busbar).
+    #[prost(message, optional, tag="7")]
+    pub sup_wh: ::core::option::Option<Bcr>,
+    /// Net apparent energy since last reset.
+    #[prost(message, optional, tag="8")]
+    pub tot_v_ah: ::core::option::Option<Bcr>,
+    /// Net reactive energy since last reset.
+    #[prost(message, optional, tag="9")]
+    pub tot_v_arh: ::core::option::Option<Bcr>,
+    /// Net real energy since last reset.
+    #[prost(message, optional, tag="10")]
+    pub tot_wh: ::core::option::Option<Bcr>,
+}
+/// Specialized 61850 MMTN LN class
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseMmtn {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="1")]
+    pub phs_a: ::core::option::Option<ReadingMmtn>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub phs_ab: ::core::option::Option<ReadingMmtn>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<ReadingMmtn>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="4")]
+    pub phs_bc: ::core::option::Option<ReadingMmtn>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="5")]
+    pub phs_c: ::core::option::Option<ReadingMmtn>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="6")]
+    pub phs_ca: ::core::option::Option<ReadingMmtn>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalRecloseActionKind {
+    #[prost(enumeration="RecloseActionKind", tag="1")]
+    pub value: i32,
+}
+/// [OpenFMB CDC extension] Per Phase reclose action kind.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseRecloseAction {
+    /// 3 Phase control.
+    #[prost(message, optional, tag="1")]
+    pub phs3: ::core::option::Option<OptionalRecloseActionKind>,
+    /// Phase A control.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<OptionalRecloseActionKind>,
+    /// Phase B control.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<OptionalRecloseActionKind>,
+    /// Phase C control.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<OptionalRecloseActionKind>,
+}
+/// [OpenFMB CDC extension] Per Phase SPC.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseSpc {
+    /// 3 Phase control.
+    #[prost(message, optional, tag="1")]
+    pub phs3: ::core::option::Option<ControlSpc>,
+    /// Phase A control.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<ControlSpc>,
+    /// Phase B control.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<ControlSpc>,
+    /// Phase C control.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<ControlSpc>,
+}
+/// [OpenFMB CDC extension] Per Phase DPS.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PhaseSps {
+    /// 3 Phase status.
+    #[prost(message, optional, tag="1")]
+    pub phs3: ::core::option::Option<StatusSps>,
+    /// Phase A status.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<StatusSps>,
+    /// Phase B status.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<StatusSps>,
+    /// Phase C status.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<StatusSps>,
+}
+/// [OpenFMB CDC extension] Phase magnitude (PMG). Phase to ground/neutral related per-phase
+/// measured values.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Pmg {
+    /// Net current, as the algebraic sum of the instantaneous values of currents flowing through all
+    /// live conductors and the neutral of a circuit at one point of the electrical installation ('phsA
+    /// instCVal'+'phsB.instCVal'+'phsC.instCVal'+'neut.instCVal').
+    #[prost(message, optional, tag="1")]
+    pub net: ::core::option::Option<Mv>,
+    /// Value of phase A.
+    #[prost(message, optional, tag="2")]
+    pub phs_a: ::core::option::Option<Mv>,
+    /// Value of phase B.
+    #[prost(message, optional, tag="3")]
+    pub phs_b: ::core::option::Option<Mv>,
+    /// Value of phase C.
+    #[prost(message, optional, tag="4")]
+    pub phs_c: ::core::option::Option<Mv>,
+}
+/// Grid connect mode kind
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RampRate {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="1")]
+    pub negative_reactive_power_kv_ar_per_min: ::core::option::Option<f32>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub negative_real_power_kw_per_min: ::core::option::Option<f32>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="3")]
+    pub positive_reactive_power_kv_ar_per_min: ::core::option::Option<f32>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="4")]
+    pub positive_real_power_kw_per_min: ::core::option::Option<f32>,
+}
+/// Generic reading message information
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadingMessageInfo {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub message_info: ::core::option::Option<MessageInfo>,
+}
+/// Specialized 61850 MMTR class
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadingMmtr {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// Apparent energy demand (direction: from busbar).
+    #[prost(message, optional, tag="2")]
+    pub dmd_v_ah: ::core::option::Option<Bcr>,
+    /// Reactive energy demand (direction: from busbar).
+    #[prost(message, optional, tag="3")]
+    pub dmd_v_arh: ::core::option::Option<Bcr>,
+    /// Real energy demand (direction: from busbar).
+    #[prost(message, optional, tag="4")]
+    pub dmd_wh: ::core::option::Option<Bcr>,
+    /// Apparent energy supply (default direction: towards busbar).
+    #[prost(message, optional, tag="5")]
+    pub sup_v_ah: ::core::option::Option<Bcr>,
+    /// Reactive energy supply (default direction: towards busbar).
+    #[prost(message, optional, tag="6")]
+    pub sup_v_arh: ::core::option::Option<Bcr>,
+    /// Real energy supply (default direction: towards busbar).
+    #[prost(message, optional, tag="7")]
+    pub sup_wh: ::core::option::Option<Bcr>,
+    /// Net apparent energy since last reset.
+    #[prost(message, optional, tag="8")]
+    pub tot_v_ah: ::core::option::Option<Bcr>,
+    /// Net reactive energy since last reset.
+    #[prost(message, optional, tag="9")]
+    pub tot_v_arh: ::core::option::Option<Bcr>,
+    /// Net real energy since last reset.
+    #[prost(message, optional, tag="10")]
+    pub tot_wh: ::core::option::Option<Bcr>,
+}
+/// Phase to ground/neutral related measured values of a three-phase system (WYE)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Wye {
+    /// Net current, as the algebraic sum of the instantaneous values of currents flowing through all
+    /// live conductors and the neutral of a circuit at one point of the electrical installation ('phsA
+    /// instCVal'+'phsB.instCVal'+'phsC.instCVal'+'neut.instCVal').
+    #[prost(message, optional, tag="1")]
+    pub net: ::core::option::Option<Cmv>,
+    /// Value of the measured phase neutral. If a direct measurement of this value is not available, it
+    /// is acceptable to substitute an estimate computed by creating the algebraic sum of the instantaneous
+    /// values of currents flowing through all live conductors ('phsA.instCVal'+'phsB.instCVal'+'phsC
+    /// instCVal'); in that case, 'neut'='res'.
+    #[prost(message, optional, tag="2")]
+    pub neut: ::core::option::Option<Cmv>,
+    /// Value of phase A.
+    #[prost(message, optional, tag="3")]
+    pub phs_a: ::core::option::Option<Cmv>,
+    /// Value of phase B.
+    #[prost(message, optional, tag="4")]
+    pub phs_b: ::core::option::Option<Cmv>,
+    /// Value of phase C.
+    #[prost(message, optional, tag="5")]
+    pub phs_c: ::core::option::Option<Cmv>,
+}
+/// Specialized 61850 MMXU LN class
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadingMmxu {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// Phase to ground/phase to neutral three phase currents.
+    #[prost(message, optional, tag="2")]
+    pub a: ::core::option::Option<Wye>,
+    /// Kind of statistical calculation, specifying how the data attributes that represent analogue
+    /// values have been calculated. The calculation method shall be the same for all data objects of the
+    /// logical node instance.If the value is 'PEAK_FUNDAMENTAL', angle may be present in a data object of
+    /// complex measured value type (CMV, such as in WYE, DEL, etc.), otherwise angle is not used (if
+    /// ‘TRUE_RMS’ and ‘RMS_FUNDAMENTAL’).If the value is 'unspecified', the dependent data objects may be
+    /// meaningless.
+    #[prost(message, optional, tag="3")]
+    pub clc_mth: ::core::option::Option<EngCalcMethodKind>,
+    /// Frequency [Hz].
+    #[prost(message, optional, tag="4")]
+    pub hz: ::core::option::Option<Mv>,
+    /// Phase to ground/phase to neutral power factors.The power factor is defined as P (active power) /
+    /// S (apparent power), so the value range is 0...1. If current (I) and voltage (U) are sinusoidal and
+    /// displaced by the angle phi, then the power factor is |cos phi|, again with the value range 0...1.
+    /// Therefore, for the power factor per phase, value is contained in 'mag' and 'ang' is not used.
+    #[prost(message, optional, tag="5")]
+    pub pf: ::core::option::Option<Wye>,
+    /// Sign convention for power factor 'PF' (and reactive power 'VAr').
+    #[prost(message, optional, tag="6")]
+    pub pf_sign: ::core::option::Option<EngPfSignKind>,
+    /// Phase to ground (line) voltages.
+    #[prost(message, optional, tag="7")]
+    pub ph_v: ::core::option::Option<Wye>,
+    /// Phase to phase voltages.
+    #[prost(message, optional, tag="8")]
+    pub ppv: ::core::option::Option<Del>,
+    /// Phase to ground/phase to neutral apparent powers S.
+    #[prost(message, optional, tag="9")]
+    pub va: ::core::option::Option<Wye>,
+    /// Phase to ground/phase to neutral reactive powers Q.
+    #[prost(message, optional, tag="10")]
+    pub v_ar: ::core::option::Option<Wye>,
+    /// Phase to ground/phase to neutral real powers P.
+    #[prost(message, optional, tag="11")]
+    pub w: ::core::option::Option<Wye>,
 }
 /// OpenFMB specialization for breaker, recloser and switch status and event profiles:  LN: Circuit
 /// breaker   Name: XCBR
@@ -1059,108 +1267,177 @@ pub struct StatusDps {
 pub struct StatusAndEventXcbr {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node_for_event_and_status: ::std::option::Option<LogicalNodeForEventAndStatus>,
+    pub logical_node_for_event_and_status: ::core::option::Option<LogicalNodeForEventAndStatus>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub dynamic_test: ::std::option::Option<EnsDynamicTestKind>,
+    pub dynamic_test: ::core::option::Option<EnsDynamicTestKind>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
-    pub pos: ::std::option::Option<StatusDps>,
+    pub pos: ::core::option::Option<PhaseDps>,
+    /// Fault latch: LT01=51A OR 51B OR 51C
+    #[prost(message, optional, tag="4")]
+    pub protection_pickup: ::core::option::Option<Acd>,
+    /// Protection mode such as a group setting or pre-defined curve profile. It is usually pre-defined
+    /// by a circuit segment service.
+    #[prost(message, optional, tag="5")]
+    pub protection_mode: ::core::option::Option<StatusIns>,
+    /// Reclose enabled
+    #[prost(message, optional, tag="6")]
+    pub reclose_enabled: ::core::option::Option<PhaseSps>,
+    /// Reclose mode such idle, cycling and lockout.
+    #[prost(message, optional, tag="7")]
+    pub reclosing_action: ::core::option::Option<PhaseRecloseAction>,
+}
+/// Integer control status
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StatusInc {
+    /// Quality of the value in 'stVal'.
+    #[prost(message, optional, tag="1")]
+    pub q: ::core::option::Option<Quality>,
+    /// Value of the data.
+    #[prost(int32, tag="2")]
+    pub st_val: i32,
+    /// Timestamp of the last change or update event of 'stVal' or the last change of value in 'q'.
+    #[prost(message, optional, tag="3")]
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// &lt;&lt;statistics&gt;&gt; Integer controlled step position information (ISC)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatusIsc {
     /// Quality of the value in 'valWTr'.
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Status value
     #[prost(int32, tag="2")]
     pub st_val: i32,
     /// Timestamp of the last change of the value in any of 'valWTr' or 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// Generic status message information
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatusMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub message_info: ::std::option::Option<MessageInfo>,
-}
-/// Controllable single point (SPC)
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StatusSpc {
-    /// Quality of the value in 'stVal'.
-    #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
-    /// Status value of the controllable data object.
-    #[prost(bool, tag="2")]
-    pub st_val: bool,
-    /// Timestamp of the last change of the value in any of 'stVal' or 'q'.
-    #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub message_info: ::core::option::Option<MessageInfo>,
 }
 /// Status value
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatusValue {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub identified_object: ::std::option::Option<IdentifiedObject>,
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub mod_blk: ::core::option::Option<bool>,
 }
 /// Visible string status (VSS)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Vss {
     /// Quality of the value in 'stVal'.
     #[prost(message, optional, tag="1")]
-    pub q: ::std::option::Option<Quality>,
+    pub q: ::core::option::Option<Quality>,
     /// Value of the data.
     #[prost(string, tag="2")]
-    pub st_val: std::string::String,
+    pub st_val: ::prost::alloc::string::String,
     /// Timestamp of the last change of the value in any of 'stVal' or 'q'.
     #[prost(message, optional, tag="3")]
-    pub t: ::std::option::Option<Timestamp>,
+    pub t: ::core::option::Option<Timestamp>,
 }
 /// LN: Generic process I/O   Name: GGIO
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StringStatusGgio {
+pub struct StringEventAndStatusGgio {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub logical_node: ::std::option::Option<LogicalNode>,
+    pub logical_node: ::core::option::Option<LogicalNode>,
     /// Phase code
     #[prost(message, optional, tag="2")]
-    pub phase: ::std::option::Option<OptionalPhaseCodeKind>,
+    pub phase: ::core::option::Option<OptionalPhaseCodeKind>,
     /// String status
     #[prost(message, optional, tag="3")]
-    pub str_in: ::std::option::Option<Vss>,
+    pub str_in: ::core::option::Option<Vss>,
 }
 /// Point definition (Point)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SwitchPoint {
     /// Switch position
     #[prost(message, optional, tag="1")]
-    pub pos: ::std::option::Option<ControlDpc>,
+    pub pos: ::core::option::Option<ControlDpc>,
     /// Start time
     #[prost(message, optional, tag="2")]
-    pub start_time: ::std::option::Option<ControlTimestamp>,
+    pub start_time: ::core::option::Option<ControlTimestamp>,
 }
 /// Curve shape setting (FC=SP) (CSG_SP)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SwitchCsg {
     /// The array with the points specifying a curve shape.
     #[prost(message, repeated, tag="1")]
-    pub crv_pts: ::std::vec::Vec<SwitchPoint>,
+    pub crv_pts: ::prost::alloc::vec::Vec<SwitchPoint>,
 }
-/// OpenFMB specialization for control schedule using:  LN: Schedule   Name: FSCH
+/// Visible string status (VSS)
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SwitchControlScheduleFsch {
-    /// Discrete value in SwitchCSG type
-    #[prost(message, optional, tag="1")]
-    pub val_dcsg: ::std::option::Option<SwitchCsg>,
+pub struct Vsc {
+    /// [OpenFMB Extension]  String control value.
+    #[prost(string, tag="1")]
+    pub ctl_val: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalControlModeKind {
+    #[prost(enumeration="ControlModeKind", tag="1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalDirectionModeKind {
+    #[prost(enumeration="DirectionModeKind", tag="1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalReactivePowerControlKind {
+    #[prost(enumeration="ReactivePowerControlKind", tag="1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalRealPowerControlKind {
+    #[prost(enumeration="RealPowerControlKind", tag="1")]
+    pub value: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalStateKind {
     #[prost(enumeration="StateKind", tag="1")]
     pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalVoltLimitModeKind {
+    #[prost(enumeration="VoltLimitModeKind", tag="1")]
+    pub value: i32,
+}
+/// Reclose action kind such as idle, cycling, or lockout.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FaultDirectionKind {
+    /// Undefined
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    Unknown = 1,
+    /// MISSING DOCUMENTATION!!!
+    Forward = 2,
+    /// MISSING DOCUMENTATION!!!
+    Backward = 3,
+    /// MISSING DOCUMENTATION!!!
+    Both = 4,
+}
+/// Reclose action kind such as idle, cycling, or lockout.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PhaseFaultDirectionKind {
+    /// Undefined
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    Unknown = 1,
+    /// MISSING DOCUMENTATION!!!
+    Forward = 2,
+    /// MISSING DOCUMENTATION!!!
+    Backward = 3,
 }
 /// The units defined for usage in the CIM.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -1244,30 +1521,32 @@ pub enum UnitSymbolKind {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum UnitMultiplierKind {
+    /// Undefined
+    Undefined = 0,
     /// No multiplier or equivalently multiply by 1.
-    None = 0,
+    None = 1,
     /// Other enum not listed
-    Other = 1,
+    Other = 2,
     /// Centi 10**-2.
-    Centi = 2,
+    Centi = 3,
     /// Deci 10**-1.
-    Deci = 3,
+    Deci = 4,
     /// Giga 10**9.
-    Giga = 4,
+    Giga = 5,
     /// Kilo 10**3.
-    Kilo = 5,
+    Kilo = 6,
     /// Mega 10**6.
-    Mega = 6,
+    Mega = 7,
     /// Micro 10**-6.
-    Micro = 7,
+    Micro = 8,
     /// Milli 10**-3.
-    Milli = 8,
+    Milli = 9,
     /// Nano 10**-9.
-    Nano = 9,
+    Nano = 10,
     /// Pico 10**-12.
-    Pico = 10,
+    Pico = 11,
     /// Tera 10**12.
-    Tera = 11,
+    Tera = 12,
 }
 /// Enumeration of phase identifiers. Allows designation of phases for both transmission and
 /// distribution equipment, circuits and loads. Residential and small commercial loads are often served
@@ -1330,20 +1609,22 @@ pub enum PhaseCodeKind {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ValidityKind {
+    /// Undefined
+    Undefined = 0,
     /// Supervision function has detected no abnormal condition of either the acquisition function or
     /// the information source.
-    Good = 0,
+    Good = 1,
     /// Supervision function has detected an abnormal condition of the acquisition function or the
     /// information source (missing or non-operating updating devices). The value is not defined under this
     /// condition. It shall be used to indicate to the client that the value may be incorrect and shall not
     /// be used.  EXAMPLE If an input unit detects an oscillation of one input it will mark the related
     /// information as invalid.
-    Invalid = 1,
+    Invalid = 2,
     /// Reserved
-    Reserved = 2,
+    Reserved = 3,
     /// Supervision function has detected any abnormal behaviour. However, the value could still be
     /// valid. It is client's responsibility to determine whether the values should be used.
-    Questionable = 3,
+    Questionable = 4,
 }
 /// (default=process) Defines the source of a value. NOTE 1 Substitution may be done locally or via
 /// the communication services. In the second case, specific attributes with a FC=SV are used. NOTE 2
@@ -1353,11 +1634,13 @@ pub enum ValidityKind {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum SourceKind {
+    /// Undefined
+    Undefined = 0,
     /// The value is provided by an input function from the process I/O or is calculated from some
     /// application function.
-    Process = 0,
+    Process = 1,
     /// The value is provided by an operator input or by an automatic source.
-    Substituted = 1,
+    Substituted = 2,
 }
 /// Validity of the value, as condensed information for the client. In case this value is not
 /// 'good', some reasons may be found in the 'detailQual'.
@@ -1385,94 +1668,96 @@ pub enum TimeAccuracyKind {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ScheduleParameterKind {
+    /// Undefined
+    Undefined = 0,
     /// MISSING DOCUMENTATION!!!
-    None = 0,
+    None = 1,
     /// Other enum not listed
-    Other = 1,
+    Other = 2,
     /// MISSING DOCUMENTATION!!!
-    ANetMag = 2,
+    ANetMag = 3,
     /// MISSING DOCUMENTATION!!!
-    ANeutMag = 3,
+    ANeutMag = 4,
     /// MISSING DOCUMENTATION!!!
-    APhsAMag = 4,
+    APhsAMag = 5,
     /// MISSING DOCUMENTATION!!!
-    APhsBMag = 5,
+    APhsBMag = 6,
     /// MISSING DOCUMENTATION!!!
-    APhsCMag = 6,
+    APhsCMag = 7,
     /// MISSING DOCUMENTATION!!!
-    HzMag = 7,
+    HzMag = 8,
     /// MISSING DOCUMENTATION!!!
-    PfNetMag = 8,
+    PfNetMag = 9,
     /// MISSING DOCUMENTATION!!!
-    PfNeutMag = 9,
+    PfNeutMag = 10,
     /// MISSING DOCUMENTATION!!!
-    PfPhsAMag = 10,
+    PfPhsAMag = 11,
     /// MISSING DOCUMENTATION!!!
-    PfPhsBMag = 11,
+    PfPhsBMag = 12,
     /// MISSING DOCUMENTATION!!!
-    PfPhsCMag = 12,
+    PfPhsCMag = 13,
     /// MISSING DOCUMENTATION!!!
-    PhVNetAng = 13,
+    PhVNetAng = 14,
     /// MISSING DOCUMENTATION!!!
-    PhVNetMag = 14,
+    PhVNetMag = 15,
     /// MISSING DOCUMENTATION!!!
-    PhVNeutAng = 15,
+    PhVNeutAng = 16,
     /// MISSING DOCUMENTATION!!!
-    PhVNeutMag = 16,
+    PhVNeutMag = 17,
     /// MISSING DOCUMENTATION!!!
-    PhVPhsAAng = 17,
+    PhVPhsAAng = 18,
     /// MISSING DOCUMENTATION!!!
-    PhVPhsAMag = 18,
+    PhVPhsAMag = 19,
     /// MISSING DOCUMENTATION!!!
-    PhVPhsBAng = 19,
+    PhVPhsBAng = 20,
     /// MISSING DOCUMENTATION!!!
-    PhVPhsBMag = 20,
+    PhVPhsBMag = 21,
     /// MISSING DOCUMENTATION!!!
-    PhVPhsCAng = 21,
+    PhVPhsCAng = 22,
     /// MISSING DOCUMENTATION!!!
-    PhVPhsCMag = 22,
+    PhVPhsCMag = 23,
     /// MISSING DOCUMENTATION!!!
-    PpvPhsAbAng = 23,
+    PpvPhsAbAng = 24,
     /// MISSING DOCUMENTATION!!!
-    PpvPhsAbMag = 24,
+    PpvPhsAbMag = 25,
     /// MISSING DOCUMENTATION!!!
-    PpvPhsBcAng = 25,
+    PpvPhsBcAng = 26,
     /// MISSING DOCUMENTATION!!!
-    PpvPhsBcMag = 26,
+    PpvPhsBcMag = 27,
     /// MISSING DOCUMENTATION!!!
-    PpvPhsCaAng = 27,
+    PpvPhsCaAng = 28,
     /// MISSING DOCUMENTATION!!!
-    PpvPhsCaMag = 28,
+    PpvPhsCaMag = 29,
     /// MISSING DOCUMENTATION!!!
-    VaNetMag = 29,
+    VaNetMag = 30,
     /// MISSING DOCUMENTATION!!!
-    VaNeutMag = 30,
+    VaNeutMag = 31,
     /// MISSING DOCUMENTATION!!!
-    VaPhsAMag = 31,
+    VaPhsAMag = 32,
     /// MISSING DOCUMENTATION!!!
-    VaPhsBMag = 32,
+    VaPhsBMag = 33,
     /// MISSING DOCUMENTATION!!!
-    VaPhsCMag = 33,
+    VaPhsCMag = 34,
     /// MISSING DOCUMENTATION!!!
-    VArNetMag = 34,
+    VArNetMag = 35,
     /// MISSING DOCUMENTATION!!!
-    VArNeutMag = 35,
+    VArNeutMag = 36,
     /// MISSING DOCUMENTATION!!!
-    VArPhsAMag = 36,
+    VArPhsAMag = 37,
     /// MISSING DOCUMENTATION!!!
-    VArPhsBMag = 37,
+    VArPhsBMag = 38,
     /// MISSING DOCUMENTATION!!!
-    VArPhsCMag = 38,
+    VArPhsCMag = 39,
     /// MISSING DOCUMENTATION!!!
-    WNetMag = 39,
+    WNetMag = 40,
     /// MISSING DOCUMENTATION!!!
-    WNeutMag = 40,
+    WNeutMag = 41,
     /// MISSING DOCUMENTATION!!!
-    WPhsAMag = 41,
+    WPhsAMag = 42,
     /// MISSING DOCUMENTATION!!!
-    WPhsBMag = 42,
+    WPhsBMag = 43,
     /// MISSING DOCUMENTATION!!!
-    WPhsCMag = 43,
+    WPhsCMag = 44,
 }
 /// Calculation method (CalcMethodKind enumeration)
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -1580,50 +1865,182 @@ pub enum DerGeneratorStateKind {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum DynamicTestKind {
+    /// Undefined
+    Undefined = 0,
     /// None
-    None = 0,
+    None = 1,
     /// Testing status
-    Testing = 1,
+    Testing = 2,
     /// Operating status
-    Operating = 2,
+    Operating = 3,
     /// Failed status
-    Failed = 3,
+    Failed = 4,
 }
 /// State kind
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum HealthKind {
-    /// MISSING DOCUMENTATION!!!
-    None = 0,
     /// No problems, normal operation ("green").
-    Ok = 1,
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    None = 1,
+    /// No problems, normal operation ("green").
+    Ok = 2,
     /// Minor problems, but in safe operating mode ("yellow"). The exact meaning is a local issue,
     /// depending on the dedicated function/device.
-    Warning = 2,
+    Warning = 3,
     /// Severe problem, no operation possible ("red").
-    Alarm = 3,
+    Alarm = 4,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SwitchingCapabilityKind {
+    /// Undefined
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    None = 1,
+    /// Open
+    Open = 2,
+    /// Close
+    Close = 3,
+    /// Open and Close
+    OpenAndClose = 4,
 }
 /// Double point position status
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum DbPosKind {
+    /// Undefined
+    Undefined = 0,
     /// Transient status
-    Transient = 0,
+    Transient = 1,
     /// Closed status
-    Closed = 1,
+    Closed = 2,
     /// Open status
-    Open = 2,
+    Open = 3,
     /// Invalid status
-    Invalid = 3,
+    Invalid = 4,
+}
+/// Reclose action kind such as idle, cycling, or lockout.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum RecloseActionKind {
+    /// Undefined
+    Undefined = 0,
+    /// Idle state
+    Idle = 1,
+    /// Cycling state
+    Cycling = 2,
+    /// Lockout state
+    Lockout = 3,
+}
+/// Dynamic test status (see IEC61850-7-2 section 20.2.1 Direct control with normal security, state
+/// machine diagram)   A simplified state machine diagram (from Herb F.) is provided.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ControlModeKind {
+    /// Undefined
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    Auto = 1,
+    /// MISSING DOCUMENTATION!!!
+    Manual = 2,
+    /// MISSING DOCUMENTATION!!!
+    Override = 3,
+    /// MISSING DOCUMENTATION!!!
+    Remote = 4,
+}
+/// The control characteristics for power flow operation
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum DirectionModeKind {
+    /// Undefined
+    Undefined = 0,
+    /// Testing status
+    LockedForward = 1,
+    /// MISSING DOCUMENTATION!!!
+    LockedReverse = 2,
+    /// MISSING DOCUMENTATION!!!
+    ReverseIdle = 3,
+    /// MISSING DOCUMENTATION!!!
+    Bidirectional = 4,
+    /// MISSING DOCUMENTATION!!!
+    NeutralIdle = 5,
+    /// MISSING DOCUMENTATION!!!
+    Cogeneration = 6,
+    /// MISSING DOCUMENTATION!!!
+    ReactiveBidirectional = 7,
+    /// MISSING DOCUMENTATION!!!
+    BiasBidirectional = 8,
+    /// MISSING DOCUMENTATION!!!
+    BiasCogeneration = 9,
+    /// MISSING DOCUMENTATION!!!
+    ReverseCogeneration = 10,
+}
+/// Real power control kind
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ReactivePowerControlKind {
+    /// MISSING DOCUMENTATION!!!
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    Advanced = 1,
+    /// MISSING DOCUMENTATION!!!
+    Droop = 2,
+    /// Voltage setpoint
+    Voltage = 3,
+    /// Reactive power setpoint
+    ReactivePower = 4,
+    /// MISSING DOCUMENTATION!!!
+    PowerFactor = 5,
+}
+/// Real power control kind
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum RealPowerControlKind {
+    /// MISSING DOCUMENTATION!!!
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    Advanced = 1,
+    /// MISSING DOCUMENTATION!!!
+    Droop = 2,
+    /// MISSING DOCUMENTATION!!!
+    Isochronous = 3,
+    /// Real power setpoint
+    RealPower = 4,
 }
 /// State kind
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum StateKind {
     /// MISSING DOCUMENTATION!!!
-    Off = 0,
+    Undefined = 0,
     /// MISSING DOCUMENTATION!!!
-    On = 1,
+    Off = 1,
     /// MISSING DOCUMENTATION!!!
-    Standby = 2,
+    On = 2,
+    /// MISSING DOCUMENTATION!!!
+    Standby = 3,
+}
+/// Voltage-limiting types
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum VoltLimitModeKind {
+    /// Undefined
+    Undefined = 0,
+    /// Testing status
+    Off = 1,
+    /// MISSING DOCUMENTATION!!!
+    HighLimitOnly = 2,
+    /// MISSING DOCUMENTATION!!!
+    LowLimitOnly = 3,
+    /// MISSING DOCUMENTATION!!!
+    HighLowLimits = 4,
+    /// MISSING DOCUMENTATION!!!
+    IvvcHighLimitOnly = 5,
+    /// MISSING DOCUMENTATION!!!
+    IvvcLowLimitOnly = 6,
+    /// MISSING DOCUMENTATION!!!
+    IvvcHighLowLimits = 7,
 }
