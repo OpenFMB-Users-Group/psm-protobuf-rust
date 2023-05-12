@@ -71,7 +71,7 @@ pub struct InterconnectionSchedule {
 }
 /// Planned interconnection schedule profile
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PlannedInterconnectionScheduleProfile {
+pub struct InterconnectionPlannedScheduleProfile {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
     pub control_message_info: ::core::option::Option<super::commonmodule::ControlMessageInfo>,
@@ -90,7 +90,7 @@ pub struct PlannedInterconnectionScheduleProfile {
 }
 /// Requested interconnection schedule profile
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RequestedInterconnectionScheduleProfile {
+pub struct InterconnectionRequestedScheduleProfile {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
     pub control_message_info: ::core::option::Option<super::commonmodule::ControlMessageInfo>,

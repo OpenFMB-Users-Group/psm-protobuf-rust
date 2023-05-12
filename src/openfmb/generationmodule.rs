@@ -1,4 +1,83 @@
-/// Point definition (Point)
+/// A single or set of synchronous machines for converting mechanical power into alternating-current
+/// power. For example, individual machines within a set may be defined for scheduling purposes while a
+/// single control signal is derived for the set. In this case there would be a GeneratingUnit for each
+/// member of the set and an additional GeneratingUnit corresponding to the set.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GeneratingUnit {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub conducting_equipment: ::core::option::Option<super::commonmodule::ConductingEquipment>,
+    /// This is the maximum operating active power limit the dispatcher can enter for this unit.
+    #[prost(message, optional, tag="2")]
+    pub max_operating_p: ::core::option::Option<super::commonmodule::ActivePower>,
+}
+/// Configured setting
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GenerationCapabilityConfiguration {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub source_capability_configuration: ::core::option::Option<super::commonmodule::SourceCapabilityConfiguration>,
+}
+/// Generation capability
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GenerationCapabilityOverride {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub identified_object: ::core::option::Option<super::commonmodule::IdentifiedObject>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub generation_capability_configuration: ::core::option::Option<GenerationCapabilityConfiguration>,
+}
+/// Generation capability profile
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GenerationCapabilityOverrideProfile {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub capability_message_info: ::core::option::Option<super::commonmodule::CapabilityMessageInfo>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub generation_capability_override: ::core::option::Option<GenerationCapabilityOverride>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="3")]
+    pub generating_unit: ::core::option::Option<GeneratingUnit>,
+}
+/// Capability ratings
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GenerationCapabilityRatings {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub source_capability_ratings: ::core::option::Option<super::commonmodule::SourceCapabilityRatings>,
+}
+/// Generation capability
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GenerationCapability {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub nameplate_value: ::core::option::Option<super::commonmodule::NameplateValue>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub generation_capability_ratings: ::core::option::Option<GenerationCapabilityRatings>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="3")]
+    pub generation_capability_configuration: ::core::option::Option<GenerationCapabilityConfiguration>,
+}
+/// Generation capability profile
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GenerationCapabilityProfile {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub capability_message_info: ::core::option::Option<super::commonmodule::CapabilityMessageInfo>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub generation_capability: ::core::option::Option<GenerationCapability>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="3")]
+    pub generating_unit: ::core::option::Option<GeneratingUnit>,
+}
+/// Point definition (Point)  Control modes: - ISO (constant F) - X axis not in Time but real power
+/// % - Droop (F vs. % power output) - X axis not in time but real power %! - Real power output
+/// (constant)  Schedule (to Circuit Segment Management service) - Contains time  Direct Control  - No
+/// time, but only the objective sent to the Circuit Segment Management)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenerationPoint {
     /// Black start enable
@@ -7,10 +86,10 @@ pub struct GenerationPoint {
     /// Enable frequency set point
     #[prost(message, optional, tag="2")]
     pub frequency_set_point_enabled: ::core::option::Option<super::commonmodule::ControlSpc>,
-    /// Black start enable
+    /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
     pub pct_hz_droop: ::core::option::Option<f32>,
-    /// Black start enable
+    /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="4")]
     pub pct_v_droop: ::core::option::Option<f32>,
     /// Ramp rates
@@ -25,7 +104,7 @@ pub struct GenerationPoint {
     /// Reset device
     #[prost(message, optional, tag="8")]
     pub reset: ::core::option::Option<super::commonmodule::ControlSpc>,
-    /// ESS state
+    /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="9")]
     pub state: ::core::option::Option<super::commonmodule::OptionalStateKind>,
     /// Synchronize back to grid
@@ -40,6 +119,36 @@ pub struct GenerationPoint {
     /// Start time
     #[prost(message, optional, tag="13")]
     pub start_time: ::core::option::Option<super::commonmodule::ControlTimestamp>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="14")]
+    pub enter_service_operation: ::core::option::Option<super::commonmodule::EnterServiceApc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="15")]
+    pub hz_w_operation: ::core::option::Option<super::commonmodule::HzWapc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="16")]
+    pub limit_w_operation: ::core::option::Option<super::commonmodule::LimitWapc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="17")]
+    pub p_f_operation: ::core::option::Option<super::commonmodule::Pfspc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="18")]
+    pub tm_hz_trip_operation: ::core::option::Option<super::commonmodule::TmHzCsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="19")]
+    pub tm_volt_trip_operation: ::core::option::Option<super::commonmodule::TmVoltCsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="20")]
+    pub v_ar_operation: ::core::option::Option<super::commonmodule::VarSpc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="21")]
+    pub volt_var_operation: ::core::option::Option<super::commonmodule::VoltVarCsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="22")]
+    pub volt_w_operation: ::core::option::Option<super::commonmodule::VoltWcsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="23")]
+    pub w_var_operation: ::core::option::Option<super::commonmodule::WVarCsg>,
 }
 /// Curve shape setting (FC=SP) (CSG_SP)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -55,7 +164,7 @@ pub struct GenerationControlScheduleFsch {
     #[prost(message, optional, tag="1")]
     pub val_dcsg: ::core::option::Option<GenerationCsg>,
 }
-/// LN: Schedule controller   Name: FSCC
+/// LN: Schedule controller   Name: FSCC
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenerationControlFscc {
     /// UML inherited base object
@@ -77,19 +186,6 @@ pub struct GenerationControl {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
     pub generation_control_fscc: ::core::option::Option<GenerationControlFscc>,
-}
-/// A single or set of synchronous machines for converting mechanical power into alternating-current
-/// power. For example, individual machines within a set may be defined for scheduling purposes while a
-/// single control signal is derived for the set. In this case there would be a GeneratingUnit for each
-/// member of the set and an additional GeneratingUnit corresponding to the set.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GeneratingUnit {
-    /// UML inherited base object
-    #[prost(message, optional, tag="1")]
-    pub conducting_equipment: ::core::option::Option<super::commonmodule::ConductingEquipment>,
-    /// This is the maximum operating active power limit the dispatcher can enter for this unit.
-    #[prost(message, optional, tag="2")]
-    pub max_operating_p: ::core::option::Option<super::commonmodule::ActivePower>,
 }
 /// Generation control profile
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -216,10 +312,10 @@ pub struct GenerationPointStatus {
     /// Enable frequency set point
     #[prost(message, optional, tag="2")]
     pub frequency_set_point_enabled: ::core::option::Option<super::commonmodule::StatusSps>,
-    /// Black start enable
+    /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
     pub pct_hz_droop: ::core::option::Option<f32>,
-    /// Black start enable
+    /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="4")]
     pub pct_v_droop: ::core::option::Option<f32>,
     /// Ramp rates
@@ -231,7 +327,7 @@ pub struct GenerationPointStatus {
     /// Enable real power set point
     #[prost(message, optional, tag="7")]
     pub real_pwr_set_point_enabled: ::core::option::Option<super::commonmodule::StatusSps>,
-    /// ESS state
+    /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="8")]
     pub state: ::core::option::Option<super::commonmodule::OptionalStateKind>,
     /// Synchronize back to grid
@@ -243,6 +339,36 @@ pub struct GenerationPointStatus {
     /// Enable voltage set point
     #[prost(message, optional, tag="11")]
     pub voltage_set_point_enabled: ::core::option::Option<super::commonmodule::StatusSps>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="12")]
+    pub enter_service_operation: ::core::option::Option<super::commonmodule::EnterServiceApc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="13")]
+    pub hz_w_operation: ::core::option::Option<super::commonmodule::HzWapc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="14")]
+    pub limit_w_operation: ::core::option::Option<super::commonmodule::LimitWapc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="15")]
+    pub p_f_operation: ::core::option::Option<super::commonmodule::Pfspc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="16")]
+    pub tm_hz_trip_operation: ::core::option::Option<super::commonmodule::TmHzCsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="17")]
+    pub tm_volt_trip_operation: ::core::option::Option<super::commonmodule::TmVoltCsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="18")]
+    pub v_ar_operation: ::core::option::Option<super::commonmodule::VarSpc>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="19")]
+    pub volt_var_operation: ::core::option::Option<super::commonmodule::VoltVarCsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="20")]
+    pub volt_w_operation: ::core::option::Option<super::commonmodule::VoltWcsg>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="21")]
+    pub w_var_operation: ::core::option::Option<super::commonmodule::WVarCsg>,
 }
 /// Specialized 61850 ZGEN class
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -265,6 +391,18 @@ pub struct GenerationEventAndStatusZgen {
     /// Point status
     #[prost(message, optional, tag="6")]
     pub point_status: ::core::option::Option<GenerationPointStatus>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="7")]
+    pub alrm: ::core::option::Option<super::commonmodule::OptionalAlrmKind>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="8")]
+    pub grid_connection_state: ::core::option::Option<super::commonmodule::OptionalGridConnectionStateKind>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="9")]
+    pub man_alrm_info: ::core::option::Option<::prost::alloc::string::String>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="10")]
+    pub operating_state: ::core::option::Option<super::commonmodule::OptionalOperatingStateKind>,
 }
 /// Specialized generation event ZGEN
 #[derive(Clone, PartialEq, ::prost::Message)]

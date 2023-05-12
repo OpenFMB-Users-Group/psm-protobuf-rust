@@ -14,7 +14,7 @@ There are a couple of methods for adding these definitions to your project in yo
 ```toml
 [dependencies]
 # 'prost' is the Rust protobuf library that is currently used by OpenFMB
-prost = "0.6.1"
+prost = "0.9.0"
 
 # Rust defintions for OpenFMB data model
 rust-openfmb-ops-protobuf = "*" # <- Change to the version you prefer
@@ -25,7 +25,7 @@ rust-openfmb-ops-protobuf = "*" # <- Change to the version you prefer
 ```toml
 [dependencies]
 # 'prost' is the Rust protobuf library that is currently used by OpenFMB
-prost = "0.6.1"
+prost = "0.9.0"
 
 # Rust defintions for OpenFMB data model
 rust-openfmb-ops-protobuf = { git = "https://gitlab.com/openfmb/psm/ops/protobuf/rust-openfmb-ops-protobuf.git", tag = "<release-tag-label>" }

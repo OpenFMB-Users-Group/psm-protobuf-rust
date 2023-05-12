@@ -370,6 +370,23 @@ pub struct BooleanEventAndStatusGgio {
     #[prost(message, optional, tag="3")]
     pub phase: ::core::option::Option<OptionalPhaseCodeKind>,
 }
+/// Generic control message info.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MessageInfo {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub message_time_stamp: ::core::option::Option<Timestamp>,
+}
+/// Generic capability message info.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CapabilityMessageInfo {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub message_info: ::core::option::Option<MessageInfo>,
+}
 /// IEC61850-7-2 Service parameter for conditions checking
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CheckConditions {
@@ -382,10 +399,20 @@ pub struct CheckConditions {
     #[prost(message, optional, tag="2")]
     pub synchro_check: ::core::option::Option<bool>,
 }
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ClearingTime {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(uint64, tag="2")]
+    pub seconds: u64,
+    /// Partial (sub) second expressed in nanoseconds (10<sup>-9</sup> second).
+    #[prost(uint32, tag="3")]
+    pub nanoseconds: u32,
+}
 /// Vector definition (Vector)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Vector {
-    /// (range=[-180...180]) Angle of the complex value (Unit.SIUnit='deg' and Unit.multiplier='');
+    /// (range=\[-180...180\]) Angle of the complex value (Unit.SIUnit='deg' and Unit.multiplier='');
     /// angle reference is defined in the context where this type is used.
     #[prost(message, optional, tag="1")]
     pub ang: ::core::option::Option<f64>,
@@ -445,7 +472,12 @@ pub struct ControlApc {
     #[prost(double, tag="1")]
     pub ctl_val: f64,
 }
-/// Specialized DPC 61850 CDC class
+/// Specialized DPC 61850 CDC class  Because objects in OpenFMB are optional fields, OpenFMB has
+/// elected to send a "True" or "False" control state when a DPC state is sent. In a poll-based system,
+/// the DPC will have two Booleans for "close" and "open", allowing a 'no-op' state if neither are true,
+/// and a winning state (usually open) if both are true. OpenFMB simply elects to not populate the
+/// control when no op is required. All state being sent will either be commanding a close or open for
+/// the PhaseDPS &amp; StatusDPS.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ControlDpc {
     /// Service parameter that determines the control activity ('false' for off, 'true' for on).
@@ -553,16 +585,6 @@ pub struct ControlIsc {
 }
 /// Generic control message info.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MessageInfo {
-    /// UML inherited base object
-    #[prost(message, optional, tag="1")]
-    pub identified_object: ::core::option::Option<IdentifiedObject>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="2")]
-    pub message_time_stamp: ::core::option::Option<Timestamp>,
-}
-/// Generic control message info.
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ControlMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
@@ -594,6 +616,16 @@ pub struct ControlValue {
     #[prost(message, optional, tag="4")]
     pub reset: ::core::option::Option<bool>,
 }
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CumulativeTime {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(uint64, tag="2")]
+    pub seconds: u64,
+    /// Partial (sub) second expressed in nanoseconds (10<sup>-9</sup> second).
+    #[prost(uint32, tag="3")]
+    pub nanoseconds: u32,
+}
 /// Interval between two date and time points.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DateTimeInterval {
@@ -617,7 +649,12 @@ pub struct Del {
     #[prost(message, optional, tag="3")]
     pub phs_ca: ::core::option::Option<Cmv>,
 }
-/// [OpenFMB CDC extension] Per Phase DPC.
+/// [OpenFMB CDC extension] Per Phase DPC. Because objects in OpenFMB are optional fields, OpenFMB
+/// has elected to send a "True" or "False" control state when a DPC state is sent. In a poll-based
+/// system, the DPC will have two Booleans for "close" and "open", allowing a 'no-op' state if neither
+/// are true, and a winning state (usually open) if both are true. OpenFMB simply elects to not populate
+/// the control when no op is required. All state being sent will either be commanding a close or open
+/// for the PhaseDPS &amp; StatusDPS.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PhaseDpc {
     /// 3 Phase control.
@@ -799,6 +836,43 @@ pub struct EnsSwitchingCapabilityKind {
 }
 /// MISSING DOCUMENTATION!!!
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDcte {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="1")]
+    pub rnd_dl_tmms: ::core::option::Option<ControlIng>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub rtn_dl_tmms: ::core::option::Option<ControlIng>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="3")]
+    pub rtn_rmp_tmms: ::core::option::Option<ControlIng>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EnterServiceApc {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="1")]
+    pub enter_service_parameter: ::core::option::Option<OperationDcte>,
+    /// This field is for an absolute value. ES Frequency High
+    #[prost(float, tag="2")]
+    pub hz_hi_lim: f32,
+    /// This field is for an absolute value. ES Frequency Low
+    #[prost(float, tag="3")]
+    pub hz_lo_lim: f32,
+    /// Permit service. If (RtnSrvAuto) true, the DER is authorized to automatically return to service;
+    /// if false, the DER must wait until an external RtnSrvAuth is received to allow it to return to
+    /// service.
+    #[prost(bool, tag="4")]
+    pub rtn_srv_auto: bool,
+    /// This is an absolute value field.  ES Voltage High
+    #[prost(float, tag="5")]
+    pub v_hi_lim: f32,
+    /// This is an absolute value field.  ES Voltage Low
+    #[prost(float, tag="6")]
+    pub v_lo_lim: f32,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Ess {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
@@ -856,6 +930,54 @@ pub struct ForecastValue {
     #[prost(message, optional, tag="1")]
     pub identified_object: ::core::option::Option<IdentifiedObject>,
 }
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDhfw {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+    /// Open Loop Response Time
+    #[prost(message, optional, tag="2")]
+    pub opl_tmms_max: ::core::option::Option<ClearingTime>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDlfw {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub opl_tmms_max: ::core::option::Option<ClearingTime>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HzWPoint {
+    /// This is an absolute value field
+    #[prost(float, tag="1")]
+    pub deadband_hz_val: f32,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(float, tag="2")]
+    pub slope_val: f32,
+}
+/// Frequency Droop Function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HzWapc {
+    /// Overfrequency Droop <i>db</i>OF  The frequency which must be higher than the reference frequency
+    /// at which to start reducing power output.
+    #[prost(message, optional, tag="1")]
+    pub over_hz_w_pt: ::core::option::Option<HzWPoint>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub over_hz_w_parameter: ::core::option::Option<OperationDhfw>,
+    /// Underfrequency Droop <i>db</i>UF  The frequency which must be lower than the reference frequency
+    /// at which to start increasing power output.
+    #[prost(message, optional, tag="3")]
+    pub under_hz_w_pt: ::core::option::Option<HzWPoint>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="4")]
+    pub under_hz_w_parameter: ::core::option::Option<OperationDlfw>,
+}
 /// <<statistics>> Integer status (INS)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatusIns {
@@ -881,6 +1003,36 @@ pub struct IntegerEventAndStatusGgio {
     /// Phase code
     #[prost(message, optional, tag="3")]
     pub phase: ::core::option::Option<OptionalPhaseCodeKind>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDwmx {
+    /// Limit Active Power Enable
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDwmn {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LimitWapc {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="1")]
+    pub max_lim_parameter: ::core::option::Option<OperationDwmx>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub min_lim_parameter: ::core::option::Option<OperationDwmn>,
+    /// This is an absolute value field.  Maximum Active Power
+    #[prost(float, tag="3")]
+    pub w_max_spt_val: f32,
+    /// This is an absolute value field.  Minimum Active Power
+    #[prost(float, tag="4")]
+    pub w_min_spt_val: f32,
 }
 /// Logical node for event and status
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -918,12 +1070,107 @@ pub struct Meter {
     #[prost(message, optional, tag="1")]
     pub conducting_equipment: ::core::option::Option<ConductingEquipment>,
 }
+/// Generic nameplate value such as name and description.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NameplateValue {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub identified_object: ::core::option::Option<IdentifiedObject>,
+    /// Model
+    #[prost(message, optional, tag="2")]
+    pub model: ::core::option::Option<::prost::alloc::string::String>,
+    /// Serial Number
+    #[prost(message, optional, tag="3")]
+    pub sernum: ::core::option::Option<::prost::alloc::string::String>,
+    /// Version
+    #[prost(message, optional, tag="4")]
+    pub sw_rev: ::core::option::Option<::prost::alloc::string::String>,
+    /// Manufacturer
+    #[prost(message, optional, tag="5")]
+    pub vendor: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDfpf {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+    /// Constant power factor excitation setting  PFExtSet: PFExtSet set to true = overexcited; PFExtSet
+    /// set to false = underexcited
+    #[prost(bool, tag="2")]
+    pub p_f_ext_set: bool,
+    /// Applies when generating.  Target power factor setting when generating.  The power factor target
+    /// is a number between -1 and 1, and is used in conjunction with PFExtSet to indicate whether it to
+    /// make it over or under excited.
+    #[prost(float, tag="3")]
+    pub p_f_gn_tgt_mx_val: f32,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDvar {
+    /// This is an absolute value field.  Constant Reactive Power
+    #[prost(float, tag="1")]
+    pub var_tgt_spt: f32,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDvvr {
+    /// Voltage-Reactive Power Mode Enable
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+    /// Open Loop Response Time
+    #[prost(message, optional, tag="2")]
+    pub opl_tmms_max: ::core::option::Option<ClearingTime>,
+    /// V<sub>Ref</sub> Reference voltage
+    #[prost(float, tag="3")]
+    pub v_ref: f32,
+    /// Autonomous <i>V</i><i><sub>Ref</sub></i><i>  </i>adjustment enable
+    #[prost(bool, tag="4")]
+    pub v_ref_adj_ena: bool,
+    /// <i>V</i><i><sub>Ref</sub></i><i>  </i>adjustment time constant
+    #[prost(message, optional, tag="5")]
+    pub v_ref_tmms: ::core::option::Option<ControlIng>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDvwc {
+    /// Voltage-Active Power Mode Enable
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+    /// Open Loop Response Time
+    #[prost(message, optional, tag="2")]
+    pub opl_tmms_max: ::core::option::Option<ClearingTime>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDwgc {
+    /// Active power setpoint. Its mxVal attribute reflects the value of the setpoint that is requested.
+    #[prost(float, tag="1")]
+    pub w_spt: f32,
+}
+/// Curve shape setting (FC=SP) (CSG_SP)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OperationDwvr {
+    /// Active-Reactive Power Mode Enable
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+}
 /// Generic event message information
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptimizationMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
     pub message_info: ::core::option::Option<MessageInfo>,
+}
+/// Constant power factor control function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Pfspc {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(bool, tag="1")]
+    pub ctl_val: bool,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub p_f_parameter: ::core::option::Option<OperationDfpf>,
 }
 /// [OpenFMB CDC extension] Per Phase ISC.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1215,6 +1462,11 @@ pub struct Wye {
     /// Value of phase C.
     #[prost(message, optional, tag="5")]
     pub phs_c: ::core::option::Option<Cmv>,
+    /// Residual current, as the algebraic sum of the instantaneous values of currents flowing through
+    /// all live conductors of a circuit at one point of the electrical installation ('phsA.instCVal'+'phsB
+    /// instCVal'+'phsC.instCVal').
+    #[prost(message, optional, tag="6")]
+    pub res: ::core::option::Option<Cmv>,
 }
 /// Specialized 61850 MMXU LN class
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1233,7 +1485,7 @@ pub struct ReadingMmxu {
     /// meaningless.
     #[prost(message, optional, tag="3")]
     pub clc_mth: ::core::option::Option<EngCalcMethodKind>,
-    /// Frequency [Hz].
+    /// Frequency \[Hz\].
     #[prost(message, optional, tag="4")]
     pub hz: ::core::option::Option<Mv>,
     /// Phase to ground/phase to neutral power factors.The power factor is defined as P (active power) /
@@ -1260,6 +1512,115 @@ pub struct ReadingMmxu {
     /// Phase to ground/phase to neutral real powers P.
     #[prost(message, optional, tag="11")]
     pub w: ::core::option::Option<Wye>,
+}
+/// Source configured setting
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SourceCapabilityConfiguration {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// Amp Maximum configured value
+    #[prost(message, optional, tag="2")]
+    pub a_max: ::core::option::Option<Asg>,
+    /// Apparent Power Maximum configured value
+    #[prost(message, optional, tag="3")]
+    pub va_max: ::core::option::Option<Asg>,
+    /// Reactive Power Absorbed Maximum configured value
+    #[prost(message, optional, tag="4")]
+    pub var_max_abs: ::core::option::Option<Asg>,
+    /// Reactive Power Injected Maximum configured value
+    #[prost(message, optional, tag="5")]
+    pub var_max_inj: ::core::option::Option<Asg>,
+    /// AC voltage maximum configured value
+    #[prost(message, optional, tag="6")]
+    pub v_max: ::core::option::Option<Asg>,
+    /// AC voltage minimum configured value
+    #[prost(message, optional, tag="7")]
+    pub v_min: ::core::option::Option<Asg>,
+    /// AC voltage nominal configured value
+    #[prost(message, optional, tag="8")]
+    pub v_nom: ::core::option::Option<Asg>,
+    /// Active Power Max configured value
+    #[prost(message, optional, tag="9")]
+    pub w_max: ::core::option::Option<Asg>,
+    /// Active Power (Over-Excited) configured value
+    #[prost(message, optional, tag="10")]
+    pub w_ovr_ext: ::core::option::Option<Asg>,
+    /// Active power configured value at specified over-excited power factor
+    #[prost(message, optional, tag="11")]
+    pub w_ovr_ext_pf: ::core::option::Option<Asg>,
+    /// Active Power (Under-Excited) configured value
+    #[prost(message, optional, tag="12")]
+    pub w_und_ext: ::core::option::Option<Asg>,
+    /// Active power configured value at specified under-excited power factor
+    #[prost(message, optional, tag="13")]
+    pub w_und_ext_pf: ::core::option::Option<Asg>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalNorOpCatKind {
+    #[prost(enumeration="NorOpCatKind", tag="1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalAbnOpCatKind {
+    #[prost(enumeration="AbnOpCatKind", tag="1")]
+    pub value: i32,
+}
+/// Source capability ratings
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SourceCapabilityRatings {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// Abnormal Operating Performance Category  Text stating: “IEEE 1547:2018 Either “I”, “II”, or
+    /// “III” is stated for the Abnormal Category
+    #[prost(enumeration="AbnOpCatKind", tag="2")]
+    pub abn_op_cat_rtg: i32,
+    /// Amp Maximum Rating  SunSpec has this field but not in IEEE1547
+    #[prost(message, optional, tag="3")]
+    pub a_max_rtg: ::core::option::Option<Asg>,
+    /// Frequency nominal rating, default to 60 hz if not provide and cannot be configured.
+    #[prost(message, optional, tag="4")]
+    pub freq_nom_rtg: ::core::option::Option<Asg>,
+    /// Normal operating performance category
+    #[prost(enumeration="NorOpCatKind", tag="5")]
+    pub nor_op_cat_rtg: i32,
+    /// Reactive susceptance that remains connected to the Area EPS in the cease to energize and trip state
+    #[prost(message, optional, tag="6")]
+    pub react_suscept_rtg: ::core::option::Option<Asg>,
+    /// Apparent Power Maximum Rating
+    #[prost(message, optional, tag="7")]
+    pub va_max_rtg: ::core::option::Option<Asg>,
+    /// Reactive Power Absorbed Maximum Rating
+    #[prost(message, optional, tag="8")]
+    pub var_max_abs_rtg: ::core::option::Option<Asg>,
+    /// Reactive Power Injected Maximum Rating
+    #[prost(message, optional, tag="9")]
+    pub var_max_inj_rtg: ::core::option::Option<Asg>,
+    /// AC voltage maximum rating
+    #[prost(message, optional, tag="10")]
+    pub v_max_rtg: ::core::option::Option<Asg>,
+    /// AC voltage minimum rating
+    #[prost(message, optional, tag="11")]
+    pub v_min_rtg: ::core::option::Option<Asg>,
+    /// AC voltage nominal rating
+    #[prost(message, optional, tag="12")]
+    pub v_nom_rtg: ::core::option::Option<Asg>,
+    /// Active Power Max Rating
+    #[prost(message, optional, tag="13")]
+    pub w_max_rtg: ::core::option::Option<Asg>,
+    /// Active Power (Over-Excited) Rating
+    #[prost(message, optional, tag="14")]
+    pub w_ovr_ext_rtg: ::core::option::Option<Asg>,
+    /// Active power rating at specified over-excited power factor
+    #[prost(message, optional, tag="15")]
+    pub w_ovr_ext_rtg_pf: ::core::option::Option<Asg>,
+    /// Active Power (Under-Excited) Rating
+    #[prost(message, optional, tag="16")]
+    pub w_und_ext_rtg: ::core::option::Option<Asg>,
+    /// Active power rating at specified under-excited power factor
+    #[prost(message, optional, tag="17")]
+    pub w_und_ext_rtg_pf: ::core::option::Option<Asg>,
 }
 /// OpenFMB specialization for breaker, recloser and switch status and event profiles:  LN: Circuit
 /// breaker   Name: XCBR
@@ -1374,12 +1735,137 @@ pub struct SwitchCsg {
     #[prost(message, repeated, tag="1")]
     pub crv_pts: ::prost::alloc::vec::Vec<SwitchPoint>,
 }
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TmHzPoint {
+    /// This is an absolute value field.
+    #[prost(float, tag="1")]
+    pub hz_val: f32,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub tm_val: ::core::option::Option<ClearingTime>,
+}
+/// Frequency-Trip Function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TmHzCsg {
+    /// HF Trip Curve Points
+    #[prost(message, repeated, tag="1")]
+    pub over_crv_pts: ::prost::alloc::vec::Vec<TmHzPoint>,
+    /// LF Trip Curve Points
+    #[prost(message, repeated, tag="2")]
+    pub under_crv_pts: ::prost::alloc::vec::Vec<TmHzPoint>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TmVoltPoint {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="1")]
+    pub tm_val: ::core::option::Option<ClearingTime>,
+    /// This is an absolute value field.
+    #[prost(float, tag="2")]
+    pub volt_val: f32,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TmVoltCsg {
+    /// HV Trip Curve Points
+    #[prost(message, repeated, tag="1")]
+    pub over_crv_pts: ::prost::alloc::vec::Vec<TmVoltPoint>,
+    /// LV Trip Curve Points
+    #[prost(message, repeated, tag="2")]
+    pub under_crv_pts: ::prost::alloc::vec::Vec<TmVoltPoint>,
+}
+/// Constant Reactive Power (Fixed VAr) Function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VarSpc {
+    /// Constant Reactive Power Mode Enable
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub var_parameter: ::core::option::Option<OperationDvar>,
+}
+/// Point definition (Point)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VoltVarPoint {
+    /// This is an absolute value field.
+    #[prost(float, tag="1")]
+    pub var_val: f32,
+    /// This is an absolute value field.
+    #[prost(float, tag="2")]
+    pub volt_val: f32,
+}
+/// Voltage-Reactive Power (Volt-VAr) Function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VoltVarCsg {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, repeated, tag="1")]
+    pub crv_pts: ::prost::alloc::vec::Vec<VoltVarPoint>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub v_var_parameter: ::core::option::Option<OperationDvvr>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VoltWPoint {
+    /// This is an absolute value field.
+    #[prost(float, tag="1")]
+    pub volt_val: f32,
+    /// This is an absolute value field.
+    #[prost(float, tag="2")]
+    pub w_val: f32,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VoltWcsg {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, repeated, tag="1")]
+    pub crv_pts: ::prost::alloc::vec::Vec<VoltWPoint>,
+    /// Voltage-Active Power (Volt-Watt) Function
+    #[prost(message, optional, tag="2")]
+    pub volt_w_parameter: ::core::option::Option<OperationDvwc>,
+}
 /// Visible string status (VSS)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Vsc {
     /// [OpenFMB Extension]  String control value.
     #[prost(string, tag="1")]
     pub ctl_val: ::prost::alloc::string::String,
+}
+/// Constant Reactive Power (Fixed VAr) Function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Wspc {
+    /// Constant Reactive Power Mode Enable
+    #[prost(bool, tag="1")]
+    pub mod_ena: bool,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub w_parameter: ::core::option::Option<OperationDwgc>,
+}
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct WVarPoint {
+    /// This is an absolute value field.
+    #[prost(float, tag="1")]
+    pub var_val: f32,
+    /// This is an absolute value field.
+    #[prost(float, tag="2")]
+    pub w_val: f32,
+}
+/// Active Power-Reactive Power (Watt-VAr) Function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct WVarCsg {
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, repeated, tag="1")]
+    pub crv_pts: ::prost::alloc::vec::Vec<WVarPoint>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="2")]
+    pub w_var_parameter: ::core::option::Option<OperationDwvr>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalAlrmKind {
+    #[prost(enumeration="AlrmKind", tag="1")]
+    pub value: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalControlModeKind {
@@ -1389,6 +1875,16 @@ pub struct OptionalControlModeKind {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OptionalDirectionModeKind {
     #[prost(enumeration="DirectionModeKind", tag="1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalGridConnectionStateKind {
+    #[prost(enumeration="GridConnectionStateKind", tag="1")]
+    pub value: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OptionalOperatingStateKind {
+    #[prost(enumeration="OperatingStateKind", tag="1")]
     pub value: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1664,7 +2160,7 @@ pub enum TimeAccuracyKind {
     /// Undefined
     Unspecified = 31,
 }
-/// ESS function kind
+/// Schedule parameter kind
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ScheduleParameterKind {
@@ -1772,7 +2268,7 @@ pub enum CalcMethodKind {
     /// All analogue values (i.e., all common attributes 'i' and 'f') meet the sampling and filtering
     /// characteristics specified in IEEE C37.118.1 for M-CLASS.
     MClass = 12,
-    /// All analogue values are [F(t+T)-F(t)] for a calculation interval T (in the same unit as the
+    /// All analogue values are \[F(t+T)-F(t)\] for a calculation interval T (in the same unit as the
     /// original entity). Note: The client can still calculate rate so: RATE = DIFF/T.
     Diff = 13,
 }
@@ -1808,7 +2304,7 @@ pub enum PfSignKind {
     /// Undefined enum value which can be used for Protobuf generation and be consistent with other
     /// technologies.
     Undefined = 0,
-    /// All analogue values are [F(t+T)-F(t)] for a calculation interval T (in the same unit as the
+    /// All analogue values are \[F(t+T)-F(t)\] for a calculation interval T (in the same unit as the
     /// original entity). Note: The client can still calculate rate so: RATE = DIFF/T.
     Iec = 1,
     /// All analogue values (i.e., all common attributes 'i' and 'f') meet the sampling and filtering
@@ -1935,6 +2431,69 @@ pub enum RecloseActionKind {
     /// Lockout state
     Lockout = 3,
 }
+/// Abnormal Operating Performance Category
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum NorOpCatKind {
+    /// Undefined
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    A = 1,
+    /// MISSING DOCUMENTATION!!!
+    B = 2,
+}
+/// Normal Operating Performance Category
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AbnOpCatKind {
+    /// Undefined
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    I = 1,
+    /// MISSING DOCUMENTATION!!!
+    Ii = 2,
+    /// MISSING DOCUMENTATION!!!
+    Iii = 3,
+}
+/// State kind
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AlrmKind {
+    /// MISSING DOCUMENTATION!!!
+    GroundFault = 0,
+    /// MISSING DOCUMENTATION!!!
+    DcOverVoltage = 1,
+    /// MISSING DOCUMENTATION!!!
+    AcDisconnectOpen = 2,
+    /// MISSING DOCUMENTATION!!!
+    DcDisconnectOpen = 3,
+    /// MISSING DOCUMENTATION!!!
+    GridDisconnect = 4,
+    /// MISSING DOCUMENTATION!!!
+    CabinetOpen = 5,
+    /// MISSING DOCUMENTATION!!!
+    ManualShutdown = 6,
+    /// MISSING DOCUMENTATION!!!
+    OverTemperature = 7,
+    /// MISSING DOCUMENTATION!!!
+    FrequencyAboveLimit = 8,
+    /// MISSING DOCUMENTATION!!!
+    FrequencyUnderLimit = 9,
+    /// MISSING DOCUMENTATION!!!
+    AcVoltageAboveLimit = 10,
+    /// MISSING DOCUMENTATION!!!
+    AcVoltageUnderLimit = 11,
+    /// MISSING DOCUMENTATION!!!
+    BlownStringFuseOnInput = 12,
+    /// MISSING DOCUMENTATION!!!
+    UnderTemperature = 13,
+    /// MISSING DOCUMENTATION!!!
+    GenericMemoryOrCommunicationError = 14,
+    /// MISSING DOCUMENTATION!!!
+    HardwareTestFailure = 15,
+    /// MISSING DOCUMENTATION!!!
+    ManufacturerAlarm = 16,
+}
 /// Dynamic test status (see IEC61850-7-2 section 20.2.1 Direct control with normal security, state
 /// machine diagram)   A simplified state machine diagram (from Herb F.) is provided.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -1977,6 +2536,48 @@ pub enum DirectionModeKind {
     BiasCogeneration = 9,
     /// MISSING DOCUMENTATION!!!
     ReverseCogeneration = 10,
+}
+/// State kind
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum GridConnectionStateKind {
+    /// MISSING DOCUMENTATION!!!
+    Disconnected = 0,
+    /// MISSING DOCUMENTATION!!!
+    Connected = 1,
+}
+/// State kind
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum OperatingStateKind {
+    /// MISSING DOCUMENTATION!!!
+    Undefined = 0,
+    /// MISSING DOCUMENTATION!!!
+    Off = 1,
+    /// MISSING DOCUMENTATION!!!
+    DisconnectedAndStandby = 2,
+    /// MISSING DOCUMENTATION!!!
+    DisconnectedAndAvailable = 3,
+    /// MISSING DOCUMENTATION!!!
+    DisconnectedAndAuthorized = 4,
+    /// MISSING DOCUMENTATION!!!
+    StartingAndSynchronizing = 5,
+    /// MISSING DOCUMENTATION!!!
+    ConnectedAndIdle = 6,
+    /// MISSING DOCUMENTATION!!!
+    ConnectedAndGenerating = 7,
+    /// MISSING DOCUMENTATION!!!
+    ConnectedAndConsuming = 8,
+    /// MISSING DOCUMENTATION!!!
+    Stopping = 9,
+    /// MISSING DOCUMENTATION!!!
+    DisconnectedAndBlocked = 10,
+    /// MISSING DOCUMENTATION!!!
+    DisconnectedAndInMaintenance = 11,
+    /// MISSING DOCUMENTATION!!!
+    CeasedToEnergize = 12,
+    /// MISSING DOCUMENTATION!!!
+    Failed = 13,
 }
 /// Real power control kind
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
