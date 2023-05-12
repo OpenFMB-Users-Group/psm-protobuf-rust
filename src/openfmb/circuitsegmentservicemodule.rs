@@ -149,7 +149,7 @@ pub struct CircuitSegmentStatus {
 pub struct CircuitSegmentStatusProfile {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
-    pub event_message_info: ::core::option::Option<super::commonmodule::EventMessageInfo>,
+    pub status_message_info: ::core::option::Option<super::commonmodule::StatusMessageInfo>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
     pub application_system: ::core::option::Option<super::commonmodule::ApplicationSystem>,
