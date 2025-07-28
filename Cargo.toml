@@ -1,16 +1,16 @@
 [package]
 name = "rust-openfmb-ops-protobuf"
 # NB: When modifying the version, also modify html_root_url in lib.rs
-version = "2.1.0"
-authors = ["Dwayne Bradley <dwayne.bradley@gmail.com>"]
+version = "2.2.0"
+authors = ["Owen"]
 license = "Apache-2.0"
-repository = "https://gitlab.com/openfmb/psm/ops/protobuf/rust-openfmb-ops-protobuf/"
+repository = "https://github.com/OpenFMB-Users-Group/psm-protobuf-rust"
 documentation = "https://docs.rs/rust-openfmb-ops-protobuf"
 readme = "README.md"
 description = "Rust language protobuf definitions for the OpenFMB operational use cases."
 keywords = ["openfmb", "protobuf"]
 categories = ["encoding"]
-edition = "2018"
+edition = "2025"
 
 [dependencies]
 prost = "0.9.0"
