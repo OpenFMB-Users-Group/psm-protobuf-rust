@@ -1,32 +1,26 @@
-/// Resource reading value
+/// Environment sensor reading value
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MeterReading {
+pub struct EnvironmentReading {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
     pub conducting_equipment_terminal_reading: ::core::option::Option<super::commonmodule::ConductingEquipmentTerminalReading>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub phase_mmtn: ::core::option::Option<super::commonmodule::PhaseMmtn>,
+    pub reading_menv: ::core::option::Option<super::commonmodule::ReadingMenv>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
-    pub reading_mmtr: ::core::option::Option<super::commonmodule::ReadingMmtr>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="4")]
-    pub reading_mmxu: ::core::option::Option<super::commonmodule::ReadingMmxu>,
-    /// MISSING DOCUMENTATION!!!
-    #[prost(message, optional, tag="5")]
-    pub reading_mmdc: ::core::option::Option<super::commonmodule::ReadingMmdc>,
+    pub reading_mmet: ::core::option::Option<super::commonmodule::ReadingMmet>,
 }
-/// Resource reading profile
+/// Environment reading profile
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MeterReadingProfile {
+pub struct EnvironmentReadingProfile {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
     pub reading_message_info: ::core::option::Option<super::commonmodule::ReadingMessageInfo>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="2")]
-    pub meter: ::core::option::Option<super::commonmodule::Meter>,
+    pub sensor: ::core::option::Option<super::commonmodule::Sensor>,
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="3")]
-    pub meter_reading: ::core::option::Option<MeterReading>,
+    pub environment_reading: ::core::option::Option<EnvironmentReading>,
 }

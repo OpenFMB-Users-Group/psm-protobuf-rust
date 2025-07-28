@@ -88,212 +88,30 @@ pub struct EssCapabilityProfile {
     #[prost(message, optional, tag="3")]
     pub ess_capability: ::core::option::Option<EssCapability>,
 }
-/// ESS inverter high level function to maintain frequency within dead bands.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FrequencyRegulation {
-    /// uint/0.01Hz  Frequency regulation is performed when the grid frequency goes beyond the dead
-    /// bands. The dead bands are defined as follows: Upper DB = frequency set point + dead band plus Lower
-    /// DB = frequency set point – dead band minus
-    #[prost(message, optional, tag="1")]
-    pub frequency_dead_band_minus: ::core::option::Option<f32>,
-    /// uint/0.01Hz  Frequency regulation is performed when the grid frequency goes beyond the dead
-    /// bands. The dead bands are defined as follows: Upper DB = frequency set point + dead band plus Lower
-    /// DB = frequency set point – dead band minus
-    #[prost(message, optional, tag="2")]
-    pub frequency_dead_band_plus: ::core::option::Option<f32>,
-    /// Control value (TRUE or FALSE)
-    #[prost(message, optional, tag="3")]
-    pub frequency_regulation_ctl: ::core::option::Option<bool>,
-    /// uint/0.01Hz  Target frequency
-    #[prost(message, optional, tag="4")]
-    pub frequency_set_point: ::core::option::Option<f32>,
-    /// uint/0.01Hz  Other modes of operation, such as peak shaving, smoothing or SOC management may
-    /// operate if the grid frequency is within the stable band. Upper stable band = frequency set point +
-    /// band plus Lower stable band = frequency set point – band minus
-    #[prost(message, optional, tag="5")]
-    pub grid_frequency_stable_band_minus: ::core::option::Option<f32>,
-    /// uint/0.01Hz  Other modes of operation, such as peak shaving, smoothing or SOC management may
-    /// operate if the grid frequency is within the stable band. Upper stable band = frequency set point +
-    /// band plus Lower stable band = frequency set point – band minus
-    #[prost(message, optional, tag="6")]
-    pub grid_frequency_stable_band_plus: ::core::option::Option<f32>,
-    /// uint/0.1%  The droops define the reaction of the PCS to under/over frequency events. A droop of
-    /// 1% means that the PCS will output 100% power if the frequency is 1% of the nominal frequency away
-    /// from the upper or lower dead band. The minimum droop value possible is 0.8%.
-    #[prost(message, optional, tag="7")]
-    pub over_frequency_droop: ::core::option::Option<f32>,
-    /// uint/0.1%  The droops define the reaction of the PCS to under/over voltage events. A droop of 1%
-    /// means that the PCS will output 100% power if the voltage is 1% of the nominal voltage away from the
-    /// upper or lower dead band. The minimum droop value possible is 0.8%.
-    #[prost(message, optional, tag="8")]
-    pub under_frequency_droop: ::core::option::Option<f32>,
-}
-/// ESS inverter high level function to maintain power level by charging or discharging
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PeakShaving {
-    /// uint/1kW  If the supervised power goes below this limit, the ESS will charge to maintain this limit.
-    #[prost(message, optional, tag="1")]
-    pub base_shaving_limit: ::core::option::Option<f32>,
-    /// Control value (TRUE or FALSE)
-    #[prost(message, optional, tag="2")]
-    pub peak_shaving_ctl: ::core::option::Option<bool>,
-    /// uint/1kW  If the supervised power goes above this limit, the ESS will discharge to maintain this
-    /// limit.
-    #[prost(message, optional, tag="3")]
-    pub peak_shaving_limit: ::core::option::Option<f32>,
-    /// uint/1kW  If the supervised power is between the band defined by these two limits then SOC
-    /// management is allowed.
-    #[prost(message, optional, tag="4")]
-    pub soc_management_allowed_high_limit: ::core::option::Option<f32>,
-    /// uint/1kW  If the supervised power is between the band defined by these two limits then SOC
-    /// management is allowed.
-    #[prost(message, optional, tag="5")]
-    pub soc_management_allowed_low_limit: ::core::option::Option<f32>,
-}
-/// ESS inverter high level function to shut down ESS if SOC exceeds high or low limits.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SocLimit {
-    /// uint/1%  These limits define the operational range of the battery. If a lineup reaches the SOC
-    /// high limit, the inverter’s output is reduced to 0. Charging is then blocked until the hysteresis is
-    /// overcome. The same logic applies to the SOC low limit, except that after the ramp down is complete,
-    /// discharging is blocked until the hysteresis is overcome.
-    #[prost(message, optional, tag="1")]
-    pub soc_high_limit: ::core::option::Option<f32>,
-    /// uint/1%  These limits define the operational range of the battery. If a lineup reaches the SOC
-    /// high limit, the inverter’s output is reduced to 0. Charging is then blocked until the hysteresis is
-    /// overcome. The same logic applies to the SOC low limit, except that after the ramp down is complete,
-    /// discharging is blocked until the hysteresis is overcome.
-    #[prost(message, optional, tag="2")]
-    pub soc_high_limit_hysteresis: ::core::option::Option<f32>,
-    /// Control value (TRUE or FALSE)
-    #[prost(message, optional, tag="3")]
-    pub soc_limit_ctl: ::core::option::Option<bool>,
-    /// uint/1%  These limits define the operational range of the battery. If a lineup reaches the SOC
-    /// high limit, the inverter’s output is reduced to 0. Charging is then blocked until the hysteresis is
-    /// overcome. The same logic applies to the SOC low limit, except that after the ramp down is complete,
-    /// discharging is blocked until the hysteresis is overcome.
-    #[prost(message, optional, tag="4")]
-    pub soc_low_limit: ::core::option::Option<f32>,
-    /// uint/1%  These hysteresis define the release conditions for the block charge or discharge
-    /// initiated by the SOC limits.For example, assume a SOC low limit of 10% and a SOC low limit
-    /// hysteresis of 2% and that discharging is blocked because the batteries SOC reached the SOC low
-    /// limit, discharging will only be allowed again after the battery’s SOC reaches 13%.
-    #[prost(message, optional, tag="5")]
-    pub soc_low_limit_hysteresis: ::core::option::Option<f32>,
-}
-/// ESS inverter high level function to maintain SOC within dead bands
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SocManagement {
-    /// uint/1%  Define a dead band (DB) around the SOC set point. When the battery SOC goes outside the
-    /// dead band, the SOC management executes and bring the SOC back to the set point. Upper DB = set point
-    /// + dead band plus Lower DB = set point – dead band minus
-    #[prost(message, optional, tag="1")]
-    pub soc_dead_band_minus: ::core::option::Option<f32>,
-    /// uint/1%  Define a dead band (DB) around the SOC set point. When the battery SOC goes outside the
-    /// dead band, the SOC management executes and bring the SOC back to the set point. Upper DB = set point
-    /// + dead band plus Lower DB = set point – dead band minus
-    #[prost(message, optional, tag="2")]
-    pub soc_dead_band_plus: ::core::option::Option<f32>,
-    /// Control value (TRUE or FALSE)
-    #[prost(message, optional, tag="3")]
-    pub soc_management_ctl: ::core::option::Option<bool>,
-    /// uint/1kW  Set point used for SOC maintenance
-    #[prost(message, optional, tag="4")]
-    pub soc_power_set_point: ::core::option::Option<f32>,
-    /// uint/1%  SOC Target in percentage (%).
-    #[prost(message, optional, tag="5")]
-    pub soc_set_point: ::core::option::Option<f32>,
-}
-/// Voltage regulation function
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct VoltageRegulation {
-    /// uint/0.1%  The droops define the reaction of the PCS to under/over voltage events. A droop of 1%
-    /// means that the PCS will output 100% power if the voltage is 1% of the nominal voltage away from the
-    /// upper or lower dead band. The minimum droop value possible is 0.8%.
-    #[prost(message, optional, tag="1")]
-    pub over_voltage_droop: ::core::option::Option<f32>,
-    /// uint/0.1%  The droops define the reaction of the PCS to under/over voltage events. A droop of 1%
-    /// means that the PCS will output 100% power if the voltage is 1% of the nominal voltage away from the
-    /// upper or lower dead band. The minimum droop value possible is 0.8%.
-    #[prost(message, optional, tag="2")]
-    pub under_voltage_droop: ::core::option::Option<f32>,
-    /// uint/0.1V  Voltage regulation is performed when the grid voltage goes beyond the dead bands. The
-    /// dead bands are defined as follows: Upper DB = voltage set point + dead band plus Lower DB = voltage
-    /// set point – dead band minus
-    #[prost(message, optional, tag="3")]
-    pub voltage_dead_band_minus: ::core::option::Option<f32>,
-    /// uint/0.1V  Voltage regulation is performed when the grid voltage goes beyond the dead bands. The
-    /// dead bands are defined as follows: Upper DB = voltage set point + dead band plus Lower DB = voltage
-    /// set point – dead band minus
-    #[prost(message, optional, tag="4")]
-    pub voltage_dead_band_plus: ::core::option::Option<f32>,
-    /// uint/0.1V  Other modes of operation, such as peak shaving, smoothing or SOC management may
-    /// operate if the grid frequency is within the stable band. Upper stable band = frequency set point +
-    /// band plus Lower stable band = frequency set point – band minus
-    #[prost(message, optional, tag="5")]
-    pub voltage_set_point: ::core::option::Option<f32>,
-}
-/// ESS inverter high level function to maintain voltage within droop dead bands.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct VoltageDroop {
-    /// Control value (TRUE or FALSE)
-    #[prost(message, optional, tag="1")]
-    pub voltage_droop_ctl: ::core::option::Option<bool>,
-    /// Voltage regulation
-    #[prost(message, optional, tag="2")]
-    pub voltage_regulation: ::core::option::Option<VoltageRegulation>,
-}
-/// ESS inverter high level function to maintain voltage within dead bands.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct VoltagePi {
-    /// Control value (TRUE or FALSE)
-    #[prost(message, optional, tag="1")]
-    pub voltage_pi_ctl: ::core::option::Option<bool>,
-    /// Voltage regulation
-    #[prost(message, optional, tag="2")]
-    pub voltage_regulation: ::core::option::Option<VoltageRegulation>,
-}
-/// ESS inverter high level function to reduce (smooth) charging or discharging rate of change.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CapacityFirming {
-    /// Control value (TRUE or FALSE)
-    #[prost(message, optional, tag="1")]
-    pub capacity_firming_ctl: ::core::option::Option<bool>,
-    /// uint/1kW/min  If the supervised power increases at a rate higher that the rate defined by these
-    /// limits, the ESS will discharge/charge at an opposite dp/dt to reduce (smooth) the rate of change at
-    /// the PCC
-    #[prost(message, optional, tag="2")]
-    pub limit_negative_dp_dt: ::core::option::Option<f32>,
-    /// uint/1kW/min  If the supervised power increases at a rate higher that the rate defined by these
-    /// limits, the ESS will discharge/charge at an opposite dp/dt to reduce (smooth) the rate of change at
-    /// the PCC
-    #[prost(message, optional, tag="3")]
-    pub limit_positive_dp_dt: ::core::option::Option<f32>,
-}
 /// ESS inverter high level functions.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EssFunction {
     /// ESS inverter high level function to reduce (smooth) charging or discharging rate of change.
     #[prost(message, optional, tag="1")]
-    pub capacity_firming: ::core::option::Option<CapacityFirming>,
+    pub capacity_firming: ::core::option::Option<super::commonmodule::CapacityFirming>,
     /// ESS inverter high level function to maintain frequency within dead bands.
     #[prost(message, optional, tag="2")]
-    pub frequency_regulation: ::core::option::Option<FrequencyRegulation>,
+    pub frequency_regulation: ::core::option::Option<super::commonmodule::FrequencyRegulation>,
     /// ESS inverter high level function to maintain power level by charging or discharging
     #[prost(message, optional, tag="3")]
-    pub peak_shaving: ::core::option::Option<PeakShaving>,
+    pub peak_shaving: ::core::option::Option<super::commonmodule::PeakShaving>,
     /// ESS inverter high level function to shut down ESS if SOC exceeds high or low limits.
     #[prost(message, optional, tag="4")]
-    pub soc_limit: ::core::option::Option<SocLimit>,
+    pub soc_limit: ::core::option::Option<super::commonmodule::SocLimit>,
     /// ESS inverter high level function to maintain SOC within dead bands
     #[prost(message, optional, tag="5")]
-    pub soc_management: ::core::option::Option<SocManagement>,
+    pub soc_management: ::core::option::Option<super::commonmodule::SocManagement>,
     /// ESS inverter high level function to maintain voltage within droop dead bands.
     #[prost(message, optional, tag="6")]
-    pub voltage_droop: ::core::option::Option<VoltageDroop>,
+    pub voltage_droop: ::core::option::Option<super::commonmodule::VoltageDroop>,
     /// ESS inverter high level function to maintain voltage within dead bands.
     #[prost(message, optional, tag="7")]
-    pub voltage_pi: ::core::option::Option<VoltagePi>,
+    pub voltage_pi: ::core::option::Option<super::commonmodule::VoltagePi>,
 }
 /// Point definition (Point)
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -569,8 +387,11 @@ pub struct EssEventAndStatusZgen {
     /// Generator is synchronized to EPS, or not; True = Synchronized
     #[prost(message, optional, tag="5")]
     pub gn_syn_st: ::core::option::Option<super::commonmodule::StatusSps>,
-    /// Point status
+    /// DC Power On/Off Status; True = DC power on
     #[prost(message, optional, tag="6")]
+    pub alrm: ::core::option::Option<super::commonmodule::OptionalAlrmKind>,
+    /// Point status
+    #[prost(message, optional, tag="7")]
     pub point_status: ::core::option::Option<EssPointStatus>,
 }
 /// Specialized 61850 ZGEN class for ESS event profile
@@ -621,6 +442,9 @@ pub struct EssReading {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="4")]
     pub reading_mmxu: ::core::option::Option<super::commonmodule::ReadingMmxu>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="5")]
+    pub reading_mmdc: ::core::option::Option<super::commonmodule::ReadingMmdc>,
 }
 /// ESS reading profile
 #[derive(Clone, PartialEq, ::prost::Message)]

@@ -223,6 +223,12 @@ pub struct RegulatorEventAndStatusAtcc {
     /// Voltage set point status
     #[prost(message, optional, tag="19")]
     pub voltage_set_point_enabled: ::core::option::Option<super::commonmodule::StatusSps>,
+    /// The control characteristics for power flow operation
+    #[prost(message, optional, tag="20")]
+    pub dir_mod: ::core::option::Option<super::commonmodule::OptionalDirectionModeKind>,
+    /// Voltage-limiting types
+    #[prost(message, optional, tag="21")]
+    pub vol_lmt_mode: ::core::option::Option<super::commonmodule::OptionalVoltLimitModeKind>,
 }
 /// OpenFMB 61850 specialization for both RegulatorEventProfile and RegulatorStatusProfile
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -278,6 +284,9 @@ pub struct RegulatorReading {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="5")]
     pub secondary_reading_mmxu: ::core::option::Option<super::commonmodule::ReadingMmxu>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="6")]
+    pub reading_mmdc: ::core::option::Option<super::commonmodule::ReadingMmdc>,
 }
 /// Regulator reading profile
 #[derive(Clone, PartialEq, ::prost::Message)]

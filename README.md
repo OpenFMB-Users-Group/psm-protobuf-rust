@@ -28,7 +28,7 @@ rust-openfmb-ops-protobuf = "*" # <- Change to the version you prefer
 prost = "0.9.0"
 
 # Rust defintions for OpenFMB data model
-rust-openfmb-ops-protobuf = { git = "https://gitlab.com/openfmb/psm/ops/protobuf/rust-openfmb-ops-protobuf.git", tag = "<release-tag-label>" }
+rust-openfmb-ops-protobuf = { git = "https://github.com/OpenFMB-Users-Group/psm-protobuf-rust", tag = "<release-tag-label>" }
 ```
 
 ## Using

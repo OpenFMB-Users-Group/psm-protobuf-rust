@@ -98,6 +98,9 @@ pub struct SwitchReading {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="5")]
     pub reading_mmxu: ::core::option::Option<super::commonmodule::ReadingMmxu>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="6")]
+    pub reading_mmdc: ::core::option::Option<super::commonmodule::ReadingMmdc>,
 }
 /// Switch reading profile
 #[derive(Clone, PartialEq, ::prost::Message)]

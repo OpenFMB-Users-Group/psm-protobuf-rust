@@ -387,6 +387,23 @@ pub struct CapabilityMessageInfo {
     #[prost(message, optional, tag="1")]
     pub message_info: ::core::option::Option<MessageInfo>,
 }
+/// ESS inverter high level function to reduce (smooth) charging or discharging rate of change.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CapacityFirming {
+    /// Control value (TRUE or FALSE)
+    #[prost(message, optional, tag="1")]
+    pub capacity_firming_ctl: ::core::option::Option<bool>,
+    /// uint/1kW/min  If the supervised power increases at a rate higher that the rate defined by these
+    /// limits, the ESS will discharge/charge at an opposite dp/dt to reduce (smooth) the rate of change at
+    /// the PCC
+    #[prost(message, optional, tag="2")]
+    pub limit_negative_dp_dt: ::core::option::Option<f32>,
+    /// uint/1kW/min  If the supervised power increases at a rate higher that the rate defined by these
+    /// limits, the ESS will discharge/charge at an opposite dp/dt to reduce (smooth) the rate of change at
+    /// the PCC
+    #[prost(message, optional, tag="3")]
+    pub limit_positive_dp_dt: ::core::option::Option<f32>,
+}
 /// IEC61850-7-2 Service parameter for conditions checking
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CheckConditions {
@@ -930,6 +947,46 @@ pub struct ForecastValue {
     #[prost(message, optional, tag="1")]
     pub identified_object: ::core::option::Option<IdentifiedObject>,
 }
+/// ESS inverter high level function to maintain frequency within dead bands.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FrequencyRegulation {
+    /// uint/0.01Hz  Frequency regulation is performed when the grid frequency goes beyond the dead
+    /// bands. The dead bands are defined as follows: Upper DB = frequency set point + dead band plus Lower
+    /// DB = frequency set point – dead band minus
+    #[prost(message, optional, tag="1")]
+    pub frequency_dead_band_minus: ::core::option::Option<f32>,
+    /// uint/0.01Hz  Frequency regulation is performed when the grid frequency goes beyond the dead
+    /// bands. The dead bands are defined as follows: Upper DB = frequency set point + dead band plus Lower
+    /// DB = frequency set point – dead band minus
+    #[prost(message, optional, tag="2")]
+    pub frequency_dead_band_plus: ::core::option::Option<f32>,
+    /// Control value (TRUE or FALSE)
+    #[prost(message, optional, tag="3")]
+    pub frequency_regulation_ctl: ::core::option::Option<bool>,
+    /// uint/0.01Hz  Target frequency
+    #[prost(message, optional, tag="4")]
+    pub frequency_set_point: ::core::option::Option<f32>,
+    /// uint/0.01Hz  Other modes of operation, such as peak shaving, smoothing or SOC management may
+    /// operate if the grid frequency is within the stable band. Upper stable band = frequency set point +
+    /// band plus Lower stable band = frequency set point – band minus
+    #[prost(message, optional, tag="5")]
+    pub grid_frequency_stable_band_minus: ::core::option::Option<f32>,
+    /// uint/0.01Hz  Other modes of operation, such as peak shaving, smoothing or SOC management may
+    /// operate if the grid frequency is within the stable band. Upper stable band = frequency set point +
+    /// band plus Lower stable band = frequency set point – band minus
+    #[prost(message, optional, tag="6")]
+    pub grid_frequency_stable_band_plus: ::core::option::Option<f32>,
+    /// uint/0.1%  The droops define the reaction of the PCS to under/over frequency events. A droop of
+    /// 1% means that the PCS will output 100% power if the frequency is 1% of the nominal frequency away
+    /// from the upper or lower dead band. The minimum droop value possible is 0.8%.
+    #[prost(message, optional, tag="7")]
+    pub over_frequency_droop: ::core::option::Option<f32>,
+    /// uint/0.1%  The droops define the reaction of the PCS to under/over voltage events. A droop of 1%
+    /// means that the PCS will output 100% power if the voltage is 1% of the nominal voltage away from the
+    /// upper or lower dead band. The minimum droop value possible is 0.8%.
+    #[prost(message, optional, tag="8")]
+    pub under_frequency_droop: ::core::option::Option<f32>,
+}
 /// MISSING DOCUMENTATION!!!
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OperationDhfw {
@@ -1161,6 +1218,28 @@ pub struct OptimizationMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
     pub message_info: ::core::option::Option<MessageInfo>,
+}
+/// ESS inverter high level function to maintain power level by charging or discharging
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PeakShaving {
+    /// uint/1kW  If the supervised power goes below this limit, the ESS will charge to maintain this limit.
+    #[prost(message, optional, tag="1")]
+    pub base_shaving_limit: ::core::option::Option<f32>,
+    /// Control value (TRUE or FALSE)
+    #[prost(message, optional, tag="2")]
+    pub peak_shaving_ctl: ::core::option::Option<bool>,
+    /// uint/1kW  If the supervised power goes above this limit, the ESS will discharge to maintain this
+    /// limit.
+    #[prost(message, optional, tag="3")]
+    pub peak_shaving_limit: ::core::option::Option<f32>,
+    /// uint/1kW  If the supervised power is between the band defined by these two limits then SOC
+    /// management is allowed.
+    #[prost(message, optional, tag="4")]
+    pub soc_management_allowed_high_limit: ::core::option::Option<f32>,
+    /// uint/1kW  If the supervised power is between the band defined by these two limits then SOC
+    /// management is allowed.
+    #[prost(message, optional, tag="5")]
+    pub soc_management_allowed_low_limit: ::core::option::Option<f32>,
 }
 /// Constant power factor control function
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1398,12 +1477,144 @@ pub struct RampRate {
     #[prost(message, optional, tag="4")]
     pub positive_real_power_kw_per_min: ::core::option::Option<f32>,
 }
+/// Specialized 61850 MENV LN class  LN: Environmental information   Name: MENV
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadingMenv {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// Emission level of CO2.
+    #[prost(message, optional, tag="2")]
+    pub co2_em: ::core::option::Option<Mv>,
+    /// Emission level of CO.
+    #[prost(message, optional, tag="3")]
+    pub co_em: ::core::option::Option<Mv>,
+    /// Emission level of NO<sub>x</sub>.
+    #[prost(message, optional, tag="4")]
+    pub n_ox_em: ::core::option::Option<Mv>,
+    /// Emission level of SO<sub>x</sub>.
+    #[prost(message, optional, tag="5")]
+    pub s_ox_em: ::core::option::Option<Mv>,
+    /// Amount of dust particles suspended in air.
+    #[prost(message, optional, tag="6")]
+    pub dust: ::core::option::Option<Mv>,
+    /// Sound pressure level.
+    #[prost(message, optional, tag="7")]
+    pub snd: ::core::option::Option<Mv>,
+    /// Amount of oxygen in combustion gases.
+    #[prost(message, optional, tag="8")]
+    pub o2_cmbu_gas: ::core::option::Option<Mv>,
+    /// Amount of ozone in the air.
+    #[prost(message, optional, tag="9")]
+    pub o3_air: ::core::option::Option<Mv>,
+}
 /// Generic reading message information
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadingMessageInfo {
     /// UML inherited base object
     #[prost(message, optional, tag="1")]
     pub message_info: ::core::option::Option<MessageInfo>,
+}
+/// Specialized 61850 MMDC LN: DC measurement   Name: MMDC
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadingMmdc {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// DC power.
+    #[prost(message, optional, tag="2")]
+    pub watt: ::core::option::Option<Mv>,
+    /// DC current.
+    #[prost(message, optional, tag="3")]
+    pub amp: ::core::option::Option<Mv>,
+    /// DC voltage.
+    #[prost(message, optional, tag="4")]
+    pub vol: ::core::option::Option<Mv>,
+    /// DC voltage between positive pole and earth.
+    #[prost(message, optional, tag="5")]
+    pub vol_ps_gnd: ::core::option::Option<Mv>,
+    /// DC voltage between negative pole and earth.
+    #[prost(message, optional, tag="6")]
+    pub vol_ng_gnd: ::core::option::Option<Mv>,
+    /// Resistance in DC circuit.
+    #[prost(message, optional, tag="7")]
+    pub ris: ::core::option::Option<Mv>,
+    /// DC resistance between positive pole and earth.
+    #[prost(message, optional, tag="8")]
+    pub ris_ps_gnd: ::core::option::Option<Mv>,
+    /// DC resistance between negative pole and earth.
+    #[prost(message, optional, tag="9")]
+    pub ris_ng_gnd: ::core::option::Option<Mv>,
+}
+/// LN: Meteorological information   Name: MMET
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadingMmet {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub logical_node: ::core::option::Option<LogicalNode>,
+    /// Temperature of environment \[&#176;C\].
+    #[prost(message, optional, tag="2")]
+    pub env_tmp: ::core::option::Option<Mv>,
+    /// Wet bulb temperature (typically in &#176;C).
+    #[prost(message, optional, tag="3")]
+    pub wet_blb_tmp: ::core::option::Option<Mv>,
+    /// Cloud cover level.
+    #[prost(message, optional, tag="4")]
+    pub cloud_cvr: ::core::option::Option<Mv>,
+    /// Humidity of environment (typically in %).
+    #[prost(message, optional, tag="5")]
+    pub env_hum: ::core::option::Option<Mv>,
+    /// Dew point.
+    #[prost(message, optional, tag="6")]
+    pub dew_pt: ::core::option::Option<Mv>,
+    /// Diffuse insolation (insolation SIUnit \[W/m<sup>2</sup>\]).
+    #[prost(message, optional, tag="7")]
+    pub dff_insol: ::core::option::Option<Mv>,
+    /// Direct normal insolation (insolation SIUnit \[W/m<sup>2</sup>\]).
+    #[prost(message, optional, tag="8")]
+    pub dct_insol: ::core::option::Option<Mv>,
+    /// Daylight duration (time elapsed between sunrise and sunset).
+    #[prost(message, optional, tag="9")]
+    pub dl_dur: ::core::option::Option<Mv>,
+    /// Total horizontal insolation (insolation SIUnit \[W/m<sup>2</sup>\]).
+    #[prost(message, optional, tag="10")]
+    pub hor_insol: ::core::option::Option<Mv>,
+    /// Total horizontal wind direction.
+    #[prost(message, optional, tag="11")]
+    pub hor_wd_dir: ::core::option::Option<Mv>,
+    /// Average horizontal wind speed.
+    #[prost(message, optional, tag="12")]
+    pub hor_wd_spd: ::core::option::Option<Mv>,
+    /// Vertical wind direction.
+    #[prost(message, optional, tag="13")]
+    pub ver_wd_dir: ::core::option::Option<Mv>,
+    /// Average vertical wind speed.
+    #[prost(message, optional, tag="14")]
+    pub ver_wd_spd: ::core::option::Option<Mv>,
+    /// Maximum wind gust speed.
+    #[prost(message, optional, tag="15")]
+    pub wd_gust_spd: ::core::option::Option<Mv>,
+    /// Barometric pressure of environment.
+    #[prost(message, optional, tag="16")]
+    pub env_pres: ::core::option::Option<Mv>,
+    /// Rainfall (typically in mm - length SIUnit \[m\]).
+    #[prost(message, optional, tag="17")]
+    pub rn_fll: ::core::option::Option<Mv>,
+    /// Snowfall density (typically in g/cm<sup>3</sup> - density SIUnit \[kg/m<sup>3</sup>\]).
+    #[prost(message, optional, tag="18")]
+    pub snw_den: ::core::option::Option<Mv>,
+    /// Snowfall temperature (typically in &#176;C).
+    #[prost(message, optional, tag="19")]
+    pub snw_tmp: ::core::option::Option<Mv>,
+    /// Snow cover (typically in mm - length SIUnit \[m\]).
+    #[prost(message, optional, tag="20")]
+    pub snw_cvr: ::core::option::Option<Mv>,
+    /// Snowfall (typically in mm - length SIUnit \[m\]).
+    #[prost(message, optional, tag="21")]
+    pub snw_fll: ::core::option::Option<Mv>,
+    /// Water equivalent of snowfall (typically in mm - length SIUnit \[m\]).
+    #[prost(message, optional, tag="22")]
+    pub snw_eq: ::core::option::Option<Mv>,
 }
 /// Specialized 61850 MMTR class
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1513,6 +1724,67 @@ pub struct ReadingMmxu {
     #[prost(message, optional, tag="11")]
     pub w: ::core::option::Option<Wye>,
 }
+/// MISSING DOCUMENTATION!!!
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Sensor {
+    /// UML inherited base object
+    #[prost(message, optional, tag="1")]
+    pub conducting_equipment: ::core::option::Option<ConductingEquipment>,
+}
+/// ESS inverter high level function to shut down ESS if SOC exceeds high or low limits.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SocLimit {
+    /// uint/1%  These limits define the operational range of the battery. If a lineup reaches the SOC
+    /// high limit, the inverter’s output is reduced to 0. Charging is then blocked until the hysteresis is
+    /// overcome. The same logic applies to the SOC low limit, except that after the ramp down is complete,
+    /// discharging is blocked until the hysteresis is overcome.
+    #[prost(message, optional, tag="1")]
+    pub soc_high_limit: ::core::option::Option<f32>,
+    /// uint/1%  These limits define the operational range of the battery. If a lineup reaches the SOC
+    /// high limit, the inverter’s output is reduced to 0. Charging is then blocked until the hysteresis is
+    /// overcome. The same logic applies to the SOC low limit, except that after the ramp down is complete,
+    /// discharging is blocked until the hysteresis is overcome.
+    #[prost(message, optional, tag="2")]
+    pub soc_high_limit_hysteresis: ::core::option::Option<f32>,
+    /// Control value (TRUE or FALSE)
+    #[prost(message, optional, tag="3")]
+    pub soc_limit_ctl: ::core::option::Option<bool>,
+    /// uint/1%  These limits define the operational range of the battery. If a lineup reaches the SOC
+    /// high limit, the inverter’s output is reduced to 0. Charging is then blocked until the hysteresis is
+    /// overcome. The same logic applies to the SOC low limit, except that after the ramp down is complete,
+    /// discharging is blocked until the hysteresis is overcome.
+    #[prost(message, optional, tag="4")]
+    pub soc_low_limit: ::core::option::Option<f32>,
+    /// uint/1%  These hysteresis define the release conditions for the block charge or discharge
+    /// initiated by the SOC limits.For example, assume a SOC low limit of 10% and a SOC low limit
+    /// hysteresis of 2% and that discharging is blocked because the batteries SOC reached the SOC low
+    /// limit, discharging will only be allowed again after the battery’s SOC reaches 13%.
+    #[prost(message, optional, tag="5")]
+    pub soc_low_limit_hysteresis: ::core::option::Option<f32>,
+}
+/// ESS inverter high level function to maintain SOC within dead bands
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SocManagement {
+    /// uint/1%  Define a dead band (DB) around the SOC set point. When the battery SOC goes outside the
+    /// dead band, the SOC management executes and bring the SOC back to the set point. Upper DB = set point
+    /// + dead band plus Lower DB = set point – dead band minus
+    #[prost(message, optional, tag="1")]
+    pub soc_dead_band_minus: ::core::option::Option<f32>,
+    /// uint/1%  Define a dead band (DB) around the SOC set point. When the battery SOC goes outside the
+    /// dead band, the SOC management executes and bring the SOC back to the set point. Upper DB = set point
+    /// + dead band plus Lower DB = set point – dead band minus
+    #[prost(message, optional, tag="2")]
+    pub soc_dead_band_plus: ::core::option::Option<f32>,
+    /// Control value (TRUE or FALSE)
+    #[prost(message, optional, tag="3")]
+    pub soc_management_ctl: ::core::option::Option<bool>,
+    /// uint/1kW  Set point used for SOC maintenance
+    #[prost(message, optional, tag="4")]
+    pub soc_power_set_point: ::core::option::Option<f32>,
+    /// uint/1%  SOC Target in percentage (%).
+    #[prost(message, optional, tag="5")]
+    pub soc_set_point: ::core::option::Option<f32>,
+}
 /// Source configured setting
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SourceCapabilityConfiguration {
@@ -1621,6 +1893,13 @@ pub struct SourceCapabilityRatings {
     /// Active power rating at specified under-excited power factor
     #[prost(message, optional, tag="17")]
     pub w_und_ext_rtg_pf: ::core::option::Option<Asg>,
+}
+/// Single point setting (FC=SP) (SPG_SP)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Spg {
+    /// The value of the status setting (false is off, true is on).
+    #[prost(bool, tag="1")]
+    pub set_val: bool,
 }
 /// OpenFMB specialization for breaker, recloser and switch status and event profiles:  LN: Circuit
 /// breaker   Name: XCBR
@@ -1785,6 +2064,55 @@ pub struct VarSpc {
     #[prost(message, optional, tag="2")]
     pub var_parameter: ::core::option::Option<OperationDvar>,
 }
+/// Voltage regulation function
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VoltageRegulation {
+    /// uint/0.1%  The droops define the reaction of the PCS to under/over voltage events. A droop of 1%
+    /// means that the PCS will output 100% power if the voltage is 1% of the nominal voltage away from the
+    /// upper or lower dead band. The minimum droop value possible is 0.8%.
+    #[prost(message, optional, tag="1")]
+    pub over_voltage_droop: ::core::option::Option<f32>,
+    /// uint/0.1%  The droops define the reaction of the PCS to under/over voltage events. A droop of 1%
+    /// means that the PCS will output 100% power if the voltage is 1% of the nominal voltage away from the
+    /// upper or lower dead band. The minimum droop value possible is 0.8%.
+    #[prost(message, optional, tag="2")]
+    pub under_voltage_droop: ::core::option::Option<f32>,
+    /// uint/0.1V  Voltage regulation is performed when the grid voltage goes beyond the dead bands. The
+    /// dead bands are defined as follows: Upper DB = voltage set point + dead band plus Lower DB = voltage
+    /// set point – dead band minus
+    #[prost(message, optional, tag="3")]
+    pub voltage_dead_band_minus: ::core::option::Option<f32>,
+    /// uint/0.1V  Voltage regulation is performed when the grid voltage goes beyond the dead bands. The
+    /// dead bands are defined as follows: Upper DB = voltage set point + dead band plus Lower DB = voltage
+    /// set point – dead band minus
+    #[prost(message, optional, tag="4")]
+    pub voltage_dead_band_plus: ::core::option::Option<f32>,
+    /// uint/0.1V  Other modes of operation, such as peak shaving, smoothing or SOC management may
+    /// operate if the grid frequency is within the stable band. Upper stable band = frequency set point +
+    /// band plus Lower stable band = frequency set point – band minus
+    #[prost(message, optional, tag="5")]
+    pub voltage_set_point: ::core::option::Option<f32>,
+}
+/// ESS inverter high level function to maintain voltage within droop dead bands.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VoltageDroop {
+    /// Control value (TRUE or FALSE)
+    #[prost(message, optional, tag="1")]
+    pub voltage_droop_ctl: ::core::option::Option<bool>,
+    /// Voltage regulation
+    #[prost(message, optional, tag="2")]
+    pub voltage_regulation: ::core::option::Option<VoltageRegulation>,
+}
+/// ESS inverter high level function to maintain voltage within dead bands.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VoltagePi {
+    /// Control value (TRUE or FALSE)
+    #[prost(message, optional, tag="1")]
+    pub voltage_pi_ctl: ::core::option::Option<bool>,
+    /// Voltage regulation
+    #[prost(message, optional, tag="2")]
+    pub voltage_regulation: ::core::option::Option<VoltageRegulation>,
+}
 /// Point definition (Point)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct VoltVarPoint {
@@ -1832,7 +2160,7 @@ pub struct Vsc {
     #[prost(string, tag="1")]
     pub ctl_val: ::prost::alloc::string::String,
 }
-/// Constant Reactive Power (Fixed VAr) Function
+/// Constant Power (Fixed W) Function
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Wspc {
     /// Constant Reactive Power Mode Enable

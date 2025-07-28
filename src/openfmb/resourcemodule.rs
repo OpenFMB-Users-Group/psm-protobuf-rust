@@ -102,6 +102,9 @@ pub struct ResourceReading {
     /// MISSING DOCUMENTATION!!!
     #[prost(message, optional, tag="4")]
     pub reading_mmxu: ::core::option::Option<super::commonmodule::ReadingMmxu>,
+    /// MISSING DOCUMENTATION!!!
+    #[prost(message, optional, tag="5")]
+    pub reading_mmdc: ::core::option::Option<super::commonmodule::ReadingMmdc>,
 }
 /// Resource reading profile
 #[derive(Clone, PartialEq, ::prost::Message)]
